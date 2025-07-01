@@ -1,59 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="/">
-
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="my_app">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>my_app</title>
-  <link rel="manifest" href="manifest.json">
-
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "1496054897";
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | Pokémon TCG Companion App</title>
+  <style>
+    :root {
+      --background: #ffffff;
+      --text: #1a1a1a;
+      --accent: #ffcc00;
+      --muted: #666;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 2rem;
+    }
+    p {
+      margin-bottom: 1rem;
+    }
+    footer {
+      margin-top: 4rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    a {
+      color: #007aff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background: #121212;
+        --text: #eaeaea;
+        --accent: #ffaa00;
+        --muted: #aaa;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Privacy Policy</h1>
+    <p><strong>Last updated:</strong> <span id="last-updated"></span></p>
+
+    <p>
+      This app is an unofficial fan-made companion app for exploring Pokémon TCG cards.
+      It is not affiliated with, endorsed, or sponsored by Nintendo, The Pokémon Company, or any of their affiliates.
+    </p>
+
+    <h2>1. No Personal Data Collected</h2>
+    <p>
+      We do not collect, store, or share any personal data. The app runs locally on your device and does not track any user activity.
+    </p>
+
+    <h2>2. No Ads or Analytics</h2>
+    <p>
+      The app does not serve advertisements and does not use any analytics or tracking frameworks.
+    </p>
+
+    <h2>3. No Account or Login</h2>
+    <p>
+      You do not need to sign up or log in to use this app. All features are available without user identification.
+    </p>
+
+    <h2>4. Use of Third-Party APIs</h2>
+    <p>
+      This app uses data from the publicly available <a href="https://api.pokemontcg.io" target="_blank" rel="noopener noreferrer">Pokémon TCG Developers API</a> to display card information. No personal data is sent to or collected by this API.
+    </p>
+
+    <h2>5. Contact</h2>
+    <p>
+      If you have questions or believe your rights are being violated, please contact us at:
+      <br />
+      📧 <a href="mailto:tehphilbdev@gmail.com">your@email.com</a>
+    </p>
+
+    <footer>
+      &copy; <span id="year"></span> Card Dex App. All rights reserved.
+    </footer>
+  </div>
+
   <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
-          });
-        }
-      });
-    });
+    const date = new Date();
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    document.getElementById("last-updated").textContent = date.toLocaleDateString("en-GB", options);
+    document.getElementById("year").textContent = date.getFullYear();
   </script>
 </body>
 </html>
