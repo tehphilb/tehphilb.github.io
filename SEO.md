@@ -12,6 +12,35 @@ Basis-URL überall: `https://www.entwicklungsraum-fussball.de` — bei abweichen
 
 ---
 
+## Live-Site (Stand Prüfung)
+
+Geprüft per HTTP-Abruf am **14.05.2026** gegen [https://www.entwicklungsraum-fussball.de/index.html](https://www.entwicklungsraum-fussball.de/index.html) (und Kurzvergleich mit `/`).
+
+**Wichtig:** Die öffentlich ausgelieferte Startseite ist **eine andere technische Variante** als dieses Repo: Live nutzt u. a. `style.css`, Google Fonts, Font Awesome (CDN) und **eigene HTML-Seiten** (`angebot.html`, `ueber-mich.html`, `anfrage.html`). Dieses Repo ist ein **Onepager** mit anderem Asset-Pfad (`css/site.css` usw.). Die SEO-Maßnahmen im Repo wirken erst, wenn **dieser Stand** auf den Webspace **deployt** und `robots.txt` / `sitemap.xml` im Document Root liegen.
+
+### Live: bereits positiv
+
+- `lang="de"`, Charset, Viewport
+- sinnvolle **Überschriftenhierarchie** (`h1` im Hero, `h2`/`h3` in Sektionen)
+- **interne Navigation** zu weiteren Seiten
+- Logo mit **kurzem `alt`**
+
+### Live: Lücken (Abgleich mit Repo-Ziel)
+
+| Thema | Befund auf der Live-`index.html` |
+|--------|----------------------------------|
+| Meta-Description | fehlt |
+| Canonical | fehlt |
+| Open Graph / Twitter Cards | fehlen |
+| JSON-LD (z. B. LocalBusiness) | nicht vorhanden |
+| `/robots.txt` | **404** |
+| `/sitemap.xml` | **404** |
+| Drittanbieter | Google Fonts + cdnjs (Performance/Datenschutz nebenbei beachten) |
+
+**Folge:** Inhaltlich brauchbar, technisches SEO und Discovery **deutlich hinter** dem, was im Repo bereits vorbereitet ist — bis zum nächsten Deploy bleibt die Live-Domain unteroptimiert.
+
+---
+
 ## Offen (Checkliste)
 
 ### Technik & Messbarkeit
@@ -23,7 +52,7 @@ Basis-URL überall: `https://www.entwicklungsraum-fussball.de` — bei abweichen
 ### Inhalt & Struktur
 
 - [ ] **Title und Meta-Description**: Auf echte Suchbegriffe feilen (z. B. Fußballtraining Hamburg, Kleingruppentraining, Jugend, ggf. Bondenwald) — kurz, einzigartig, ohne Keyword-Stuffing.
-- [ ] **Zusätzliche indexierbare Unterseiten** erwägen: Aktuell eine starke Startseite mit `#`-Abschnitten; für weitere Suchintentionen eigene URLs (z. B. Konzept, Standort, Trainer) mit eigenem `<title>` und `<h1>` können zusätzliche Rankingslots schaffen.
+- [ ] **Zusätzliche indexierbare Unterseiten** (für **dieses Repo**, Onepager): Eine starke Startseite mit `#`-Abschnitten; für weitere Suchintentionen eigene URLs (z. B. Konzept, Standort, Trainer) mit eigenem `<title>` und `<h1>` können zusätzliche Rankingslots schaffen. *(Die aktuelle **Live**-Site hat bereits getrennte HTML-Seiten — nach Umstellung auf den Repo-Stand entfällt das oder wird neu bewertet.)*
 - [ ] **FAQ-Bereich** (optional): Häufige Elternfragen beantworten; nur bei sachlicher Passung und Einhaltung der Google-Richtlinien mit `FAQPage`-Markup denken.
 - [ ] **Bilder**: Überall sinnvolle `alt`-Texte (beschreibend, nicht nur „Bild“).
 
@@ -60,3 +89,5 @@ Basis-URL überall: `https://www.entwicklungsraum-fussball.de` — bei abweichen
 | `sitemap.xml` | URL-Liste für Suchmaschinen |
 
 Bei Domain- oder Pfadänderungen diese drei Stellen plus alle **absoluten** URLs in Meta und JSON-LD synchron halten.
+
+Nach jedem Deploy: kurz prüfen, ob **Live** unter derselben Domain die erwarteten Dateien ausliefert (`curl -sSI https://www.entwicklungsraum-fussball.de/robots.txt` bzw. `…/sitemap.xml`) und ob der Quelltext der Startseite Meta-Tags und JSON-LD enthält.
