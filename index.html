@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entwicklungsraum Fussball | Talent fördern. Spiel verstehen.</title>
+  <meta name="description" content="Individuelles Kleingruppentraining für ambitionierte Jugendspieler in Hamburg. Ergänzend zum Vereinstraining – mit Zeit, Raum und Sicherheit." />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#top">
+      <div class="nav-logo-mark">EF</div>
+      <div class="nav-logo-text">Entwicklungsraum<span>Fussball</span></div>
+    </a>
+
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#angebot">Konzept & Angebot</a></li>
+        <li><a href="#ueber-mich">Über mich</a></li>
+        <li><a href="#anfrage" class="nav-cta">Anfrage stellen</a></li>
+      </ul>
+      <button class="theme-toggle" id="themeToggle" aria-label="Theme wechseln">
+        <svg class="icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#angebot" onclick="toggleMenu()">Konzept & Angebot</a>
+    <a href="#ueber-mich" onclick="toggleMenu()">Über mich</a>
+    <a href="#anfrage" onclick="toggleMenu()">Anfrage stellen →</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-bg"></div>
+    <div class="hero-field-lines">
+      <!-- Seitenverhältnis ~105:68 (Spielfeld), Tore links/rechts -->
+      <svg viewBox="0 0 616 409" fill="none" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="10" width="600" height="389" stroke="white" stroke-width="3"/>
+        <line x1="308" y1="10" x2="308" y2="399" stroke="white" stroke-width="2"/>
+        <circle cx="308" cy="204.5" r="52" stroke="white" stroke-width="2"/>
+        <circle cx="308" cy="204.5" r="4" fill="currentColor"/>
+        <rect x="8" y="89" width="94" height="231" stroke="white" stroke-width="2"/>
+        <rect x="514" y="89" width="94" height="231" stroke="white" stroke-width="2"/>
+        <rect x="8" y="152" width="31" height="105" stroke="white" stroke-width="2"/>
+        <rect x="577" y="152" width="31" height="105" stroke="white" stroke-width="2"/>
+        <circle cx="71" cy="204.5" r="3" fill="currentColor"/>
+        <circle cx="545" cy="204.5" r="3" fill="currentColor"/>
+      </svg>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">Kleingruppentraining · Hamburg</div>
+      <h1>Talent<br><span class="accent">fördern.</span><br>Spiel<br>verstehen.</h1>
+      <p class="hero-sub">Individuelles Kleingruppentraining für ambitionierte Jugendspieler – ergänzend zum Vereinstraining, im eigenen Tempo, mit echtem Fokus auf Entwicklung.</p>
+      <div class="hero-actions">
+        <a href="#anfrage" class="btn-primary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Jetzt durchstarten
+        </a>
+        <a href="#angebot" class="btn-ghost">
+          Konzept ansehen
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">3–6</div>
+          <div class="stat-label">Spieler pro Gruppe</div>
+        </div>
+        <div>
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Individuelle Rückmeldung</div>
+        </div>
+        <div>
+          <div class="stat-num">17+</div>
+          <div class="stat-label">Jahre Erfahrung</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILLARS -->
+  <section class="pillars" id="philosophie">
+    <div class="container">
+      <div class="pillars-header reveal">
+        <div>
+          <span class="section-tag">Trainingsphilosophie</span>
+          <h2 class="section-title">Mehr als<br>nur Training.</h2>
+        </div>
+        <p class="section-body">Im Entwicklungsraum Fußball geht es nicht darum, schneller oder besser zu sein als andere. Es geht darum, das eigene Spiel bewusst zu verstehen – mit Klarheit, Ruhe und Struktur.</p>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card reveal">
+          <div class="pillar-num">01</div>
+          <div class="pillar-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <h3 class="pillar-title">Spielintelligenz &amp; Spielverständnis</h3>
+          <p class="pillar-text">Nicht nur das Wie – sondern das Warum. Spielsituationen erkennen, Lösungen finden, Entscheidungen selbstständig treffen.</p>
+        </div>
+        <div class="pillar-card reveal">
+          <div class="pillar-num">02</div>
+          <div class="pillar-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 class="pillar-title">Technik &amp; Handlungsschnelligkeit</h3>
+          <p class="pillar-text">Technische Inhalte immer spielnah – unter Zeit- und Entscheidungsdruck, angepasst an das individuelle Niveau jedes Spielers.</p>
+        </div>
+        <div class="pillar-card reveal">
+          <div class="pillar-num">03</div>
+          <div class="pillar-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <h3 class="pillar-title">Mentalität &amp; Selbstvertrauen</h3>
+          <p class="pillar-text">Mit Fehlern umgehen, Verantwortung übernehmen, auch in anspruchsvollen Situationen ruhig bleiben. Stärke von innen heraus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY KLEINGRUPPENTRAINING -->
+  <section class="why" id="angebot">
+    <div class="why-inner">
+      <div class="reveal">
+        <span class="section-tag">Warum Kleingruppentraining?</span>
+        <h2 class="section-title">Zeit. Raum.<br><span style="color:var(--green)">Sicherheit.</span></h2>
+        <p class="why-lead">Viele Kinder trainieren mehrmals pro Woche im Verein – und trotzdem bleiben bestimmte Dinge auf der Strecke. Nicht weil sie sich nicht anstrengen, sondern weil große Gruppen wenig Raum für individuelle Entwicklung lassen.</p>
+        <p class="why-lead" style="margin-bottom:0;">Im Kleingruppentraining schaffen wir bewusst einen ruhigen, fokussierten und persönlichen Rahmen, in dem Entwicklung möglich wird.</p>
+      </div>
+
+      <div class="reveal">
+        <div class="stat-row">
+          <div class="stat-cell">
+            <div class="num">3–6</div>
+            <div class="lbl">Kinder pro Gruppe</div>
+          </div>
+          <div class="stat-cell">
+            <div class="num">100%</div>
+            <div class="lbl">Rückmeldung</div>
+          </div>
+          <div class="stat-cell">
+            <div class="num">17+</div>
+            <div class="lbl">Jahre Erfahrung</div>
+          </div>
+        </div>
+
+        <span class="section-tag">In kleinen Gruppen erlebt jedes Kind:</span>
+        <ul class="benefit-list">
+          <li>
+            <svg class="icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+            Mehr Ballkontakte und aktive Spielsituationen
+          </li>
+          <li>
+            <svg class="icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+            Lernt, eigene Entscheidungen im Spiel zu treffen
+          </li>
+          <li>
+            <svg class="icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+            Individuelle Rückmeldung und gezielte Impulse
+          </li>
+          <li>
+            <svg class="icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+            Sicherheit, Neues auszuprobieren und Fehler zu machen
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY STRIP -->
+  <div class="philosophy-strip">
+    <div class="philosophy-strip-inner reveal">
+      <blockquote>„Zeit, Raum und Sicherheit – das ist die Basis für nachhaltige Entwicklung im Fußball."</blockquote>
+      <cite>— Michael Fraenkel, Trainer & Gründer</cite>
+    </div>
+  </div>
+
+  <!-- FÜR WEN -->
+  <section class="fuer-wen">
+    <div class="container">
+      <div class="fuer-wen-header reveal">
+        <div>
+          <span class="section-tag">Für wen ist das Angebot gedacht?</span>
+          <h2 class="section-title">Fußball&shy;begeisterte Kinder, die mehr wollen.</h2>
+        </div>
+        <p class="section-body" style="margin-top:8px;">Das Kleingruppentraining richtet sich an Kinder, die sich gezielt weiterentwickeln möchten – unabhängig davon, ob sie erste Schritte machen oder bereits sehr talentiert sind.</p>
+      </div>
+
+      <div class="player-cards reveal">
+        <div class="player-card">
+          <div class="card-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <h4>Freude am Fußball</h4>
+          <p>Kinder, die regelmäßig trainieren und echte Leidenschaft für den Sport mitbringen.</p>
+        </div>
+        <div class="player-card">
+          <div class="card-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          </div>
+          <h4>Offen für Impulse</h4>
+          <p>Neugierig, lernbereit und motiviert, das eigene Spiel besser zu verstehen.</p>
+        </div>
+        <div class="player-card">
+          <div class="card-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h4>Technisch gefordert</h4>
+          <p>Kinder, die im Vereinstraining nicht immer individuelle Rückmeldung erhalten und mehr wollen.</p>
+        </div>
+        <div class="player-card">
+          <div class="card-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h4>Mehr Entscheidungssicherheit</h4>
+          <p>Mehr Klarheit und Sicherheit in Spielsituationen gewinnen wollen.</p>
+        </div>
+        <div class="talent-card">
+          <div class="tc-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <div>
+            <h4>Besonders talentierte & engagierte Kinder profitieren</h4>
+            <p>Sie bekommen mehr Wiederholungen, differenzierteres Feedback und Trainingsinhalte, die über das Alltägliche hinausgehen – ohne dabei den Spaß oder die Leichtigkeit zu verlieren.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NICHT-ANGEBOT -->
+  <section class="nicht">
+    <div class="nicht-inner">
+      <div class="reveal">
+        <span class="section-tag">Klare Abgrenzung</span>
+        <h2 class="section-title">Was dieses Angebot bewusst nicht ist.</h2>
+        <p class="section-body" style="margin-bottom:36px;">Der Entwicklungsraum Fußball ist keine Fußballschule und keine Akademie.</p>
+        <a href="#anfrage" class="btn-primary">
+          Jetzt Platz anfragen
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="reveal">
+        <div class="nicht-grid">
+          <div class="nicht-item">
+            <div class="nicht-x">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <h4>Keine Massenformate</h4>
+              <p>Keine wechselnden Gruppen und keine kurzfristigen Camps.</p>
+            </div>
+          </div>
+          <div class="nicht-item">
+            <div class="nicht-x">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            </div>
+            <div>
+              <h4>Keine Selektion</h4>
+              <p>Es geht nicht um Vergleich oder schnelle Ergebnisse.</p>
+            </div>
+          </div>
+          <div class="nicht-item">
+            <div class="nicht-x">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            </div>
+            <div>
+              <h4>Keine Rankings</h4>
+              <p>Keine Leistungsversprechen oder „nächste Schritte nach oben".</p>
+            </div>
+          </div>
+          <div class="nicht-summary">
+            <p>Stattdessen steht die <strong>individuelle Entwicklung des Kindes</strong> im Mittelpunkt – mit Zeit, Aufmerksamkeit und einem klaren Blick auf das, was jedes Kind gerade braucht.</p>
+            <p>Das Kleingruppentraining ist bewusst als <strong>Ergänzung zum Vereinstraining</strong> gedacht, nicht als Ersatz.</p>
+            <div class="tag-line">Ergänzen.<br>Nicht ersetzen.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFILE: ÜBER MICH -->
+  <section class="profile-section" id="ueber-mich">
+    <div class="profile-inner">
+      <div class="reveal">
+        <div class="photo-frame">
+          <img
+            class="photo-frame-img"
+            src="assets/michael-fraenkel-profilkarte.jpg"
+            alt="Michael Fraenkel, Trainer und Gründer"
+            width="900"
+            height="1200"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="photo-label">
+            <div>
+              <div class="photo-label-name">Michael Fraenkel</div>
+              <div class="photo-label-role">Trainer & Gründer</div>
+            </div>
+            <svg width="20" height="20" fill="var(--green)" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+        </div>
+
+        <div class="credential-chips">
+          <div class="chip">
+            <div class="chip-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+            </div>
+            <div>
+              <div class="chip-title">Sportwissenschaften M.A.</div>
+              <div class="chip-sub">Rehabilitation & Prävention</div>
+            </div>
+          </div>
+          <div class="chip">
+            <div class="chip-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <div>
+              <div class="chip-title">DFB B+ Lizenz</div>
+              <div class="chip-sub">UEFA Youth B · Leistungsfußball</div>
+            </div>
+          </div>
+          <div class="chip">
+            <div class="chip-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div>
+              <div class="chip-title">Trainermentor</div>
+              <div class="chip-sub">Ausbildung & Support für Nachwuchstrainer</div>
+            </div>
+          </div>
+          <div class="chip dark">
+            <div class="chip-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            </div>
+            <div>
+              <div class="chip-title">Seit 2009</div>
+              <div class="chip-sub">17+ Jahre Trainerfahrung</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <span class="section-tag">Über mich</span>
+        <h2 class="section-title" style="margin-bottom:28px;">Michael<br>Fraenkel.</h2>
+
+        <p class="bio-lead">Seit 2009 begleite ich Kinder und Jugendliche als Fußballtrainer in ihrer sportlichen und persönlichen Entwicklung. In dieser Zeit durfte ich in sehr unterschiedlichen Kontexten arbeiten – vom klassischen Vereinsalltag über leistungsorientierte Nachwuchsarbeit bis hin zur gezielten individuellen Förderung im DFB-Umfeld.</p>
+
+        <div class="philosophy-pull">
+          <blockquote>„Nicht der Spieler muss sich dem Training anpassen –<br>sondern <em>das Training dem Spieler.</em>"</blockquote>
+        </div>
+
+        <p class="bio-lead">Mir ist wichtig, Kinder nicht in feste Schablonen zu pressen, sondern sie in ihrer Persönlichkeit, Entscheidungsfähigkeit und Spielfreude zu stärken. Ich verstehe mich dabei weniger als klassischer Anweiser, sondern als <strong>Lernbegleiter</strong>, der Orientierung gibt, Fragen stellt und Entwicklung ermöglicht.</p>
+
+        <p class="bio-lead" style="margin-bottom:0;">Meine Arbeit stützt sich auf eine fundierte Ausbildung im Fußball sowie ein sportwissenschaftliches Studium (M.A.). Das bedeutet: Training wird nicht nur leistungsorientiert, sondern immer auch <strong>gesundheitsbewusst und altersgerecht</strong> gedacht.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="timeline-section">
+    <div class="timeline-inner">
+      <div class="timeline-header reveal">
+        <span class="section-tag">Mein Weg & Meine Stationen</span>
+        <h2 class="section-title">Von 2009<br>bis heute.</h2>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item current reveal">
+          <div class="tl-dot">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div class="tl-body">
+            <div class="tl-era">Aktuell</div>
+            <div class="tl-title">Leitung & Entwicklung</div>
+            <p class="tl-text">Neben meiner Tätigkeit im DFB-Umfeld, beim Hamburger Fußballverband und in der 1. FC Köln Fußballschule leite ich aktuell die <strong>NTSV-Fußballschule</strong> und begleite dort sowohl Kinder als auch Nachwuchstrainer in ihrer Entwicklung.</p>
+            <div class="tl-badges">
+              <span class="tl-badge">Leitung NTSV-Fußballschule</span>
+              <span class="tl-badge">DFB-Umfeld</span>
+              <span class="tl-badge">1. FC Köln</span>
+              <span class="tl-badge">HFV</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item reveal">
+          <div class="tl-dot">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <div class="tl-body">
+            <div class="tl-era">Leistungsbereich</div>
+            <div class="tl-title">Erfolg & Erfahrung (U17)</div>
+            <p class="tl-text">Als Teammanager und Co-Trainer einer U17 im leistungsorientierten Bereich durfte ich außergewöhnliche Erfolge mitgestalten.</p>
+            <div class="tl-badges">
+              <span class="tl-badge">Norddeutscher Meister</span>
+              <span class="tl-badge">DFB-Nachwuchsliga Aufstieg</span>
+            </div>
+            <p class="tl-quote">„Diese Erfahrungen helfen mir heute, Leistungsanforderungen realistisch einzuordnen und Kinder vor unnötigem Druck zu schützen."</p>
+          </div>
+        </div>
+
+        <div class="tl-item reveal">
+          <div class="tl-dot">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg>
+          </div>
+          <div class="tl-body">
+            <div class="tl-era">Seit 2009</div>
+            <div class="tl-title">Der Start</div>
+            <p class="tl-text">Begleitung von Kindern und Jugendlichen in ihrer sportlichen und persönlichen Entwicklung in verschiedensten Kontexten – der Grundstein für alles, was folgte.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING QUOTE -->
+  <section class="closing-quote">
+    <div class="closing-quote-inner reveal">
+      <blockquote>Im Entwicklungsraum Fußball<br>fließt all das <span>zusammen.</span></blockquote>
+      <p>Erfahrung, Fachwissen und vor allem die Überzeugung, dass nachhaltige Entwicklung Zeit, Vertrauen und einen klaren Rahmen braucht.</p>
+      <a href="#anfrage" class="btn-primary">
+        Kontakt aufnehmen
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="anfrage">
+    <div class="contact-inner">
+      <div class="reveal">
+        <div class="form-card">
+          <div class="form-title">Anfrage stellen</div>
+          <p class="form-subtitle">Schildere uns unverbindlich, worum es dir für dein Kind geht. Wir melden uns in Kürze.</p>
+
+          <form id="kontakt-form" action="#anfrage" method="get">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="kf-name">Dein Name</label>
+                <input id="kf-name" name="name" type="text" autocomplete="name" placeholder="Max Mustermann" required />
+              </div>
+              <div class="form-group">
+                <label for="kf-email">E-Mail</label>
+                <input id="kf-email" name="email" type="email" autocomplete="email" placeholder="max@beispiel.de" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="kf-phone">Telefon / WhatsApp</label>
+                <input id="kf-phone" name="phone" type="tel" autocomplete="tel" placeholder="0176 123 456 78" />
+              </div>
+              <div class="form-group">
+                <label for="kf-age">Alter des Kindes</label>
+                <select id="kf-age" name="age" required>
+                  <option value="" disabled selected>Bitte wählen</option>
+                  <option value="6–8 Jahre">6–8 Jahre</option>
+                  <option value="9–11 Jahre">9–11 Jahre</option>
+                  <option value="12–14 Jahre">12–14 Jahre</option>
+                  <option value="15–17 Jahre">15–17 Jahre</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="kf-exp">Bisherige Erfahrungen &amp; Vereinszugehörigkeit</label>
+              <input id="kf-exp" name="experience" type="text" placeholder="z.B. seit 3 Jahren im Verein, U10-Spieler" />
+            </div>
+
+            <div class="form-group">
+              <label for="kf-msg">Was wünschst du dir für dein Kind?</label>
+              <textarea id="kf-msg" name="message" placeholder="z.B. mehr Entscheidungssicherheit, bessere Technik, mehr Selbstvertrauen..."></textarea>
+            </div>
+
+            <div class="form-consent">
+              <input type="checkbox" id="privacy-consent" name="privacy" value="1" required />
+              <label for="privacy-consent">Ich habe die <a href="recht/datenschutz.html" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a> zur Kenntnis genommen und willige in die Verarbeitung meiner Angaben zur Bearbeitung der Anfrage ein (Art. 6 Abs. 1 lit. a DSGVO). Die Daten werden nicht an Dritte verkauft; bei Nutzung von „Absenden“ öffnet sich dein E-Mail-Programm — die Übermittlung erfolgt dann über deinen Anbieter.</label>
+            </div>
+
+            <button class="form-submit" type="submit">
+              Anfrage absenden
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+
+          <div class="form-feedback" id="form-feedback" hidden role="status" aria-live="polite">
+            <p class="form-feedback-title">E-Mail-Programm</p>
+            <p class="form-feedback-text">Wenn sich <strong>kein</strong> Programm geöffnet hat (häufig bei reinem Webmail), kopiere den Text und sende ihn manuell an die angezeigte Adresse.</p>
+            <label class="form-feedback-label" for="form-feedback-body">Nachricht (bearbeitbar)</label>
+            <textarea id="form-feedback-body" class="form-feedback-textarea" rows="10" spellcheck="false"></textarea>
+            <div class="form-feedback-actions">
+              <button type="button" class="btn-secondary" id="form-copy-btn">In Zwischenablage kopieren</button>
+              <a class="btn-secondary btn-secondary-link" id="form-mailto-again" href="#">E-Mail-App erneut öffnen</a>
+            </div>
+          </div>
+
+          <p class="form-note">Keine Verpflichtung. Kein Druck. Nur ein gemeinsames Hinschauen. Es wird kein Drittanbieter-Formulardienst genutzt; der Versand läuft über dein E-Mail-Programm oder manuell.</p>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="sidebar-intro">
+          <span class="section-tag">Direkter Kontakt</span>
+          <h2 class="section-title" style="margin-bottom:16px;">Auch direkt<br>erreichbar.</h2>
+          <p>Wenn du vorab eine kurze Frage hast oder etwas klären möchtest, erreichst du Michael auch direkt:</p>
+        </div>
+
+        <div class="contact-cards">
+          <a class="contact-card" id="contact-email-link" href="mailto:kontakt@entwicklungsraum-fussball.de">
+            <div class="cc-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="cc-label">E-Mail</div>
+              <div class="cc-value" id="contact-email-text">kontakt@entwicklungsraum-fussball.de</div>
+            </div>
+          </a>
+          <a class="contact-card" id="contact-phone-link" href="tel:+4917662532567">
+            <div class="cc-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="cc-label">Telefon / WhatsApp</div>
+              <div class="cc-value" id="contact-phone-text">0176 625 32567</div>
+            </div>
+          </a>
+          <div class="contact-card" style="cursor:default;">
+            <div class="cc-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="cc-label">Standort</div>
+              <div class="cc-value" id="contact-location-text">Hamburg & Umgebung</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-philosophy">
+          <blockquote>„Der erste Schritt ist kein Commitment, sondern ein <em>gemeinsames Hinschauen.</em>"</blockquote>
+          <cite>— Michael Fraenkel</cite>
+        </div>
+
+        <div class="steps">
+          <div class="steps-title">So geht es weiter</div>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-text">
+                <strong>Anfrage senden</strong>
+                <p>Kurze Beschreibung, worum es dir geht – vollkommen unverbindlich.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-text">
+                <strong>Gespräch führen</strong>
+                <p>Michael meldet sich persönlich für ein erstes Kennenlernen.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-text">
+                <strong>Passendes Format finden</strong>
+                <p>Gemeinsam schauen wir, ob und wie das Angebot zum Kind passt.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="nav-logo" href="#top">
+          <div class="nav-logo-mark">EF</div>
+          <div class="nav-logo-text">Entwicklungsraum<span>Fussball</span></div>
+        </a>
+        <p>Talent fördern. Spiel verstehen. Entwicklung ermöglichen.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigation</div>
+        <ul class="footer-links">
+          <li><a href="#top">Startseite</a></li>
+          <li><a href="#angebot">Konzept & Angebot</a></li>
+          <li><a href="#ueber-mich">Über mich</a></li>
+          <li><a href="#anfrage">Anfrage</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Rechtliches</div>
+        <ul class="footer-links">
+          <li><a href="recht/impressum.html">Impressum</a></li>
+          <li><a href="recht/datenschutz.html">Datenschutz</a></li>
+          <li><a href="recht/agb.html">AGB</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Entwicklungsraum Fussball. Michael Fraenkel. Alle Rechte vorbehalten.</span>
+      <span style="color:var(--green);">Hamburg & Umgebung</span>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP -->
+  <button class="back-to-top" id="backToTop" aria-label="Nach oben">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
+
+  <script src="js/site.js" defer></script>
+</body>
+</html>

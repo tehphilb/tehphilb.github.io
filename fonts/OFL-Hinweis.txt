@@ -1,0 +1,9 @@
+Barlow und Barlow Condensed
+-----------------------------
+Lizenziert unter der SIL Open Font License, Version 1.1.
+Quelle der Schriftdateien: Google Fonts (Verteilung derselben OFL-Dateien).
+
+Volltext der Lizenz: https://openfontlicense.org/
+
+Die WOFF2-Dateien in diesem Ordner wurden für die Website lokal eingebunden,
+damit beim Besuch keine Verbindung zu fonts.googleapis.com oder fonts.gstatic.com nötig ist.
