@@ -1,0 +1,5 @@
+# Produktions-Domain anpassen, falls die Seite woanders läuft.
+User-agent: *
+Allow: /
+
+Sitemap: https://www.entwicklungsraum-fussball.de/sitemap.xml
