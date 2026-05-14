@@ -209,7 +209,7 @@ nav {
 
 .nav-logo-text span {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.12em;
   color: var(--green);
@@ -387,18 +387,10 @@ section {
 }
 
 .section-body {
-  font-size: 17px;
+  font-size: 16px;
   color: var(--text-body);
   max-width: 560px;
   line-height: 1.7;
-}
-
-.section-divider {
-  width: 100%;
-  height: 1px;
-  background: var(--border);
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 /* BUTTONS */
@@ -683,7 +675,7 @@ section {
 
 .pillar-num {
   font-family: var(--font-display);
-  font-size: 72px;
+  font-size: clamp(48px, 6vw, 72px);
   font-weight: 900;
   color: var(--green-light);
   line-height: 1;
@@ -795,7 +787,7 @@ section {
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  padding: 18px 20px;
+  padding: 20px;
   background: var(--section-alt);
   border-radius: 12px;
   border-left: 3px solid var(--green);
@@ -916,7 +908,7 @@ section {
 }
 
 .player-card p {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   line-height: 1.55;
 }
@@ -960,7 +952,7 @@ section {
 }
 
 .talent-card p {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--invert-text-muted);
   line-height: 1.55;
 }
@@ -980,7 +972,7 @@ section {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: clamp(40px, 5vw, 80px);
   align-items: start;
 }
 
@@ -1023,7 +1015,7 @@ section {
 }
 
 .nicht-item p {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   line-height: 1.5;
 }
@@ -1196,7 +1188,7 @@ section {
 }
 
 .bio-lead {
-  font-size: 19px;
+  font-size: 18px;
   color: var(--text-body);
   line-height: 1.75;
   margin-bottom: 28px;
@@ -1309,7 +1301,7 @@ section {
 
 .tl-era {
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1584,7 +1576,7 @@ section {
 
 .cc-label {
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1688,7 +1680,7 @@ section {
 }
 
 .step-text p {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   line-height: 1.5;
 }
@@ -1707,7 +1699,7 @@ footer {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 48px;
+  gap: clamp(24px, 3.5vw, 56px);
 }
 
 .footer-brand .nav-logo {
@@ -1762,6 +1754,13 @@ footer {
   font-size: 13px;
   color: var(--text-muted);
 }
+
+/* Context-specific overrides (ersetzt inline styles im HTML) */
+.profile-inner .section-title     { margin-bottom: 28px; }
+.sidebar-intro .section-title     { margin-bottom: 16px; }
+.fuer-wen-header .section-body    { margin-top: 8px; }
+.nicht .section-body              { margin-bottom: 36px; }
+.why-inner .why-lead:last-of-type { margin-bottom: 0; }
 
 /* ═══════════════════════════════════════════
        SCROLL REVEAL
@@ -1959,7 +1958,7 @@ footer {
 .form-feedback-label {
   display: block;
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
