@@ -997,52 +997,90 @@
               Schildere uns unverbindlich, worum es dir für dein Kind geht. Wir
               melden uns in Kürze.
             </p>
+            <p class="form-required-note">
+              <span aria-hidden="true">*</span> Pflichtfelder
+            </p>
 
             <form id="kontakt-form" action="#anfrage" method="get">
               <div class="form-row">
                 <div class="form-group">
-                  <label for="kf-name">Dein Name</label>
+                  <label for="kf-name"
+                    >Dein Name
+                    <span class="required-marker" aria-hidden="true"
+                      >*</span
+                    ></label
+                  >
                   <input
                     id="kf-name"
                     name="name"
                     type="text"
                     autocomplete="name"
                     placeholder="Max Mustermann"
+                    minlength="2"
+                    aria-describedby="kf-name-error"
                     required
                   />
+                  <span
+                    class="form-field-error"
+                    id="kf-name-error"
+                    aria-live="polite"
+                  ></span>
                 </div>
                 <div class="form-group">
-                  <label for="kf-email">E-Mail</label>
+                  <label for="kf-email"
+                    >E-Mail
+                    <span class="required-marker" aria-hidden="true"
+                      >*</span
+                    ></label
+                  >
                   <input
                     id="kf-email"
                     name="email"
                     type="email"
                     autocomplete="email"
                     placeholder="max@beispiel.de"
+                    aria-describedby="kf-email-error"
                     required
                   />
+                  <span
+                    class="form-field-error"
+                    id="kf-email-error"
+                    aria-live="polite"
+                  ></span>
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
-                  <label for="kf-phone">Telefon / WhatsApp</label>
+                  <label for="kf-phone">Telefon / WhatsApp (optional)</label>
                   <input
                     id="kf-phone"
                     name="phone"
                     type="tel"
                     autocomplete="tel"
                     placeholder="0176 123 456 78"
+                    aria-describedby="kf-phone-error"
                   />
+                  <span
+                    class="form-field-error"
+                    id="kf-phone-error"
+                    aria-live="polite"
+                  ></span>
                 </div>
                 <div class="form-group">
-                  <label for="kf-birthdate">Geburtsdatum des Kindes</label>
+                  <label for="kf-birthdate"
+                    >Geburtsdatum des Kindes
+                    <span class="required-marker" aria-hidden="true"
+                      >*</span
+                    ></label
+                  >
                   <div class="date-input">
                     <input
                       id="kf-birthdate"
                       name="birthdate"
                       type="date"
                       placeholder="13 July 2007"
+                      aria-describedby="kf-birthdate-error"
                       required
                     />
                     <span class="date-placeholder" aria-hidden="true"
@@ -1100,28 +1138,51 @@
                       </div>
                     </div>
                   </div>
+                  <span
+                    class="form-field-error"
+                    id="kf-birthdate-error"
+                    aria-live="polite"
+                  ></span>
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="kf-exp"
-                  >Bisherige Erfahrungen &amp; Vereinszugehörigkeit</label
+                  >Bisherige Erfahrungen &amp; Vereinszugehörigkeit
+                  <span class="required-marker" aria-hidden="true">*</span></label
                 >
                 <input
                   id="kf-exp"
                   name="experience"
                   type="text"
                   placeholder="z.B. seit 3 Jahren im Verein, U10-Spieler"
+                  minlength="2"
+                  aria-describedby="kf-exp-error"
+                  required
                 />
+                <span
+                  class="form-field-error"
+                  id="kf-exp-error"
+                  aria-live="polite"
+                ></span>
               </div>
 
               <div class="form-group">
-                <label for="kf-msg">Was wünschst du dir für dein Kind?</label>
+                <label for="kf-msg"
+                  >Was wünschst du dir für dein Kind? (optional)</label
+                >
                 <textarea
                   id="kf-msg"
                   name="message"
                   placeholder="z.B. mehr Entscheidungssicherheit, bessere Technik, mehr Selbstvertrauen..."
+                  minlength="10"
+                  aria-describedby="kf-msg-error"
                 ></textarea>
+                <span
+                  class="form-field-error"
+                  id="kf-msg-error"
+                  aria-live="polite"
+                ></span>
               </div>
 
               <div class="form-consent">
@@ -1130,6 +1191,7 @@
                   id="privacy-consent"
                   name="privacy"
                   value="1"
+                  aria-describedby="privacy-consent-error"
                   required
                 />
                 <label for="privacy-consent"
@@ -1144,11 +1206,17 @@
                   Angaben zur Bearbeitung der Anfrage ein (Art. 6 Abs. 1 lit. a
                   DSGVO). Die Daten werden nicht an Dritte verkauft; bei Nutzung
                   von „Absenden“ öffnet sich dein E-Mail-Programm — die
-                  Übermittlung erfolgt dann über deinen Anbieter.</label
+                  Übermittlung erfolgt dann über deinen Anbieter.
+                  <span class="required-marker" aria-hidden="true">*</span></label
                 >
               </div>
+              <span
+                class="form-field-error consent-error"
+                id="privacy-consent-error"
+                aria-live="polite"
+              ></span>
 
-              <button class="form-submit" type="submit">
+              <button class="form-submit" type="submit" disabled>
                 Anfrage absenden
                 <svg
                   width="16"

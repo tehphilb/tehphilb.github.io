@@ -455,10 +455,211 @@
     var feedbackBody = document.getElementById('form-feedback-body');
     var copyBtn = document.getElementById('form-copy-btn');
     var mailtoAgain = document.getElementById('form-mailto-again');
+    var submitButton = form.querySelector('.form-submit');
+    var fields = {
+      name: {
+        input: document.getElementById('kf-name'),
+        error: document.getElementById('kf-name-error'),
+        touched: false
+      },
+      email: {
+        input: document.getElementById('kf-email'),
+        error: document.getElementById('kf-email-error'),
+        touched: false
+      },
+      phone: {
+        input: document.getElementById('kf-phone'),
+        error: document.getElementById('kf-phone-error'),
+        touched: false
+      },
+      birthdate: {
+        input: birthdate,
+        error: document.getElementById('kf-birthdate-error'),
+        touched: false
+      },
+      experience: {
+        input: document.getElementById('kf-exp'),
+        error: document.getElementById('kf-exp-error'),
+        touched: false
+      },
+      message: {
+        input: document.getElementById('kf-msg'),
+        error: document.getElementById('kf-msg-error'),
+        touched: false
+      },
+      privacy: {
+        input: document.getElementById('privacy-consent'),
+        error: document.getElementById('privacy-consent-error'),
+        touched: false
+      }
+    };
+
+    function validBirthdate(value) {
+      var input = value.trim();
+      var iso = input.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      var numeric = input.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/);
+      var words = input.match(/^(\d{1,2})\s+([A-Za-zÄÖÜäöü]+)\s+(\d{4})$/);
+      var selectedDay;
+      var selectedMonth;
+      var selectedYear;
+      var monthNames = {
+        january: 1,
+        januar: 1,
+        february: 2,
+        februar: 2,
+        march: 3,
+        märz: 3,
+        april: 4,
+        may: 5,
+        mai: 5,
+        june: 6,
+        juni: 6,
+        july: 7,
+        juli: 7,
+        august: 8,
+        september: 9,
+        october: 10,
+        oktober: 10,
+        november: 11,
+        december: 12,
+        dezember: 12
+      };
+
+      if (iso) {
+        selectedYear = Number(iso[1]);
+        selectedMonth = Number(iso[2]);
+        selectedDay = Number(iso[3]);
+      } else if (numeric) {
+        selectedDay = Number(numeric[1]);
+        selectedMonth = Number(numeric[2]);
+        selectedYear = Number(numeric[3]);
+      } else if (words) {
+        selectedDay = Number(words[1]);
+        selectedMonth = monthNames[words[2].toLowerCase()];
+        selectedYear = Number(words[3]);
+      } else {
+        return false;
+      }
+
+      if (!selectedMonth) return false;
+      var selectedDate = new Date(
+        selectedYear,
+        selectedMonth - 1,
+        selectedDay
+      );
+      var currentDate = new Date();
+      currentDate.setHours(23, 59, 59, 999);
+      return (
+        selectedDate.getFullYear() === selectedYear &&
+        selectedDate.getMonth() === selectedMonth - 1 &&
+        selectedDate.getDate() === selectedDay &&
+        selectedDate <= currentDate
+      );
+    }
+
+    function validationMessage(key, input) {
+      var value = input.type === 'checkbox' ? '' : input.value.trim();
+      if (key === 'name') {
+        if (!value) return 'Bitte gib deinen Namen ein.';
+        if (value.length < 2) return 'Der Name muss mindestens 2 Zeichen haben.';
+      }
+      if (key === 'email') {
+        if (!value) return 'Bitte gib deine E-Mail-Adresse ein.';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
+          return 'Bitte gib eine vollständige E-Mail-Adresse ein.';
+        }
+      }
+      if (key === 'phone' && value) {
+        var digits = value.replace(/\D/g, '');
+        if (!/^[+\d\s()./-]+$/.test(value) || digits.length < 6) {
+          return 'Bitte gib eine gültige Telefonnummer ein.';
+        }
+      }
+      if (key === 'birthdate') {
+        if (!value) return 'Bitte gib das Geburtsdatum des Kindes ein.';
+        if (!validBirthdate(value)) {
+          return 'Bitte gib ein gültiges Geburtsdatum ein.';
+        }
+      }
+      if (key === 'experience') {
+        if (!value) {
+          return 'Bitte beschreibe kurz die bisherigen Erfahrungen.';
+        }
+        if (value.length < 2) {
+          return 'Bitte gib mindestens 2 Zeichen ein.';
+        }
+      }
+      if (key === 'message') {
+        if (value && value.length < 10) {
+          return 'Bitte gib mindestens 10 Zeichen ein.';
+        }
+      }
+      if (key === 'privacy' && !input.checked) {
+        return 'Bitte stimme der Datenschutzerklärung zu.';
+      }
+      return '';
+    }
+
+    function validateField(key, showError) {
+      var field = fields[key];
+      if (!field || !field.input) return true;
+      if (showError) field.touched = true;
+      var message = validationMessage(key, field.input);
+      var visibleError = field.touched && Boolean(message);
+
+      field.input.setCustomValidity(message);
+      field.input.setAttribute(
+        'aria-invalid',
+        visibleError ? 'true' : 'false'
+      );
+      if (key === 'privacy') {
+        var consent = field.input.closest('.form-consent');
+        if (consent) consent.classList.toggle('has-error', visibleError);
+      } else {
+        field.input.classList.toggle('has-error', visibleError);
+      }
+      if (field.error) {
+        field.error.textContent = field.touched ? message : '';
+      }
+      return !message;
+    }
+
+    function validateForm(showAllErrors) {
+      var valid = true;
+      Object.keys(fields).forEach(function (key) {
+        if (!validateField(key, showAllErrors)) valid = false;
+      });
+      if (submitButton) submitButton.disabled = !valid;
+      return valid;
+    }
+
+    Object.keys(fields).forEach(function (key) {
+      var field = fields[key];
+      if (!field.input) return;
+      var eventName = field.input.type === 'checkbox' ? 'change' : 'input';
+      field.input.addEventListener(eventName, function () {
+        if (field.input.type === 'checkbox') field.touched = true;
+        validateForm(false);
+      });
+      if (eventName !== 'change') {
+        field.input.addEventListener('change', function () {
+          validateForm(false);
+        });
+      }
+      field.input.addEventListener('blur', function () {
+        field.touched = true;
+        validateForm(false);
+      });
+      field.input.addEventListener('invalid', function () {
+        field.touched = true;
+        validateField(key, false);
+      });
+    });
+    validateForm(false);
 
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
-      if (!form.checkValidity()) {
+      if (!validateForm(true) || !form.checkValidity()) {
         form.reportValidity();
         return;
       }
