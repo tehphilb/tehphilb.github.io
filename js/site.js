@@ -135,6 +135,13 @@
     });
   }
 
+  function formatBirthdate(iso) {
+    if (!iso) return '';
+    var parts = iso.split('-');
+    if (parts.length !== 3) return iso;
+    return parts[2] + '.' + parts[1] + '.' + parts[0];
+  }
+
   function buildMailtoBody(data) {
     var lines = [
       '— Anfrage über die Website —',
@@ -142,7 +149,7 @@
       'Name: ' + (data.name || ''),
       'E-Mail: ' + (data.email || ''),
       'Telefon: ' + (data.phone || ''),
-      'Alter des Kindes: ' + (data.age || ''),
+      'Geburtsdatum des Kindes: ' + formatBirthdate(data.birthdate),
       'Erfahrung / Verein: ' + (data.experience || ''),
       '',
       'Wunsch / Nachricht:',
@@ -169,9 +176,281 @@
     document.body.removeChild(a);
   }
 
+  function initSafariDatePicker(birthdate) {
+    var userAgent = navigator.userAgent;
+    var isDesktopSafari =
+      /Safari/.test(userAgent) &&
+      !/Chrome|Chromium|CriOS|Edg|OPR/.test(userAgent) &&
+      navigator.maxTouchPoints < 2;
+    if (!isDesktopSafari) return;
+
+    var picker = document.getElementById('ios-date-picker');
+    if (!picker) return;
+
+    var months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    var wheels = {
+      day: picker.querySelector('[data-picker-unit="day"]'),
+      month: picker.querySelector('[data-picker-unit="month"]'),
+      year: picker.querySelector('[data-picker-unit="year"]')
+    };
+    var selected = { day: 13, month: 7, year: 2007 };
+    var scrollTimers = {};
+
+    birthdate.type = 'text';
+    birthdate.removeAttribute('max');
+    birthdate.removeAttribute('placeholder');
+    birthdate.setAttribute('data-custom-picker', 'true');
+    birthdate.setAttribute('aria-haspopup', 'dialog');
+    birthdate.setAttribute('aria-expanded', 'false');
+
+    function parseDate(value) {
+      var input = value.trim();
+      var numeric = input.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/);
+      var words = input.match(/^(\d{1,2})\s+([A-Za-zÄÖÜäöü]+)\s+(\d{4})$/);
+      var parsedDay;
+      var parsedMonth;
+      var parsedYear;
+
+      if (numeric) {
+        parsedDay = Number(numeric[1]);
+        parsedMonth = Number(numeric[2]);
+        parsedYear = Number(numeric[3]);
+      } else if (words) {
+        var monthNames = {
+          january: 1,
+          januar: 1,
+          february: 2,
+          februar: 2,
+          march: 3,
+          märz: 3,
+          april: 4,
+          may: 5,
+          mai: 5,
+          june: 6,
+          juni: 6,
+          july: 7,
+          juli: 7,
+          august: 8,
+          september: 9,
+          october: 10,
+          oktober: 10,
+          november: 11,
+          december: 12,
+          dezember: 12
+        };
+        parsedDay = Number(words[1]);
+        parsedMonth = monthNames[words[2].toLowerCase()];
+        parsedYear = Number(words[3]);
+      } else {
+        return null;
+      }
+
+      if (!parsedMonth) return null;
+      var date = new Date(parsedYear, parsedMonth - 1, parsedDay);
+      var today = new Date();
+      today.setHours(23, 59, 59, 999);
+      if (
+        date.getFullYear() !== parsedYear ||
+        date.getMonth() !== parsedMonth - 1 ||
+        date.getDate() !== parsedDay ||
+        date > today
+      ) {
+        return null;
+      }
+      return { day: parsedDay, month: parsedMonth, year: parsedYear };
+    }
+
+    function validateManualInput() {
+      if (!birthdate.value.trim()) {
+        birthdate.setCustomValidity('');
+        return;
+      }
+      var parsed = parseDate(birthdate.value);
+      birthdate.setCustomValidity(
+        parsed ? '' : 'Bitte gib ein gültiges Datum ein, z. B. 13.07.2007.'
+      );
+      if (parsed) selected = parsed;
+    }
+
+    function addOption(wheel, value, label) {
+      var option = document.createElement('button');
+      option.type = 'button';
+      option.className = 'ios-picker-option';
+      option.dataset.value = String(value);
+      option.setAttribute('role', 'option');
+      option.setAttribute('aria-selected', 'false');
+      option.textContent = label;
+      wheel.appendChild(option);
+    }
+
+    for (var day = 1; day <= 31; day += 1) {
+      addOption(wheels.day, day, String(day));
+    }
+    months.forEach(function (month, index) {
+      addOption(wheels.month, index + 1, month);
+    });
+    var currentYear = new Date().getFullYear();
+    for (var year = currentYear; year >= currentYear - 40; year -= 1) {
+      addOption(wheels.year, year, String(year));
+    }
+
+    function getOption(unit, value) {
+      return Array.prototype.find.call(
+        wheels[unit].querySelectorAll('.ios-picker-option'),
+        function (option) {
+          return Number(option.dataset.value) === value;
+        }
+      );
+    }
+
+    function paintSelection(unit, shouldScroll) {
+      var options = wheels[unit].querySelectorAll('.ios-picker-option');
+      options.forEach(function (option) {
+        var active = Number(option.dataset.value) === selected[unit];
+        option.classList.toggle('is-selected', active);
+        option.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      var activeOption = getOption(unit, selected[unit]);
+      if (activeOption && shouldScroll) {
+        wheels[unit].scrollTop =
+          activeOption.offsetTop -
+          (wheels[unit].clientHeight - activeOption.offsetHeight) / 2;
+      }
+    }
+
+    function selectValue(unit, value, shouldScroll) {
+      selected[unit] = value;
+      var maxDay = new Date(selected.year, selected.month, 0).getDate();
+      if (selected.day > maxDay) {
+        selected.day = maxDay;
+        paintSelection('day', shouldScroll);
+      }
+      paintSelection(unit, shouldScroll);
+    }
+
+    Object.keys(wheels).forEach(function (unit) {
+      var wheel = wheels[unit];
+      wheel.addEventListener('click', function (event) {
+        var option = event.target.closest('.ios-picker-option');
+        if (!option) return;
+        selectValue(unit, Number(option.dataset.value), true);
+      });
+      wheel.addEventListener('scroll', function () {
+        window.clearTimeout(scrollTimers[unit]);
+        scrollTimers[unit] = window.setTimeout(function () {
+          var wheelCenter = wheel.scrollTop + wheel.clientHeight / 2;
+          var nearest = null;
+          var nearestDistance = Infinity;
+          wheel.querySelectorAll('.ios-picker-option').forEach(function (option) {
+            var optionCenter = option.offsetTop + option.offsetHeight / 2;
+            var distance = Math.abs(optionCenter - wheelCenter);
+            if (distance < nearestDistance) {
+              nearest = option;
+              nearestDistance = distance;
+            }
+          });
+          if (nearest) {
+            selectValue(unit, Number(nearest.dataset.value), false);
+          }
+        }, 80);
+      });
+      wheel.addEventListener('keydown', function (event) {
+        if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+        event.preventDefault();
+        var options = Array.from(
+          wheel.querySelectorAll('.ios-picker-option')
+        );
+        var active = getOption(unit, selected[unit]);
+        var index = options.indexOf(active);
+        var nextIndex =
+          event.key === 'ArrowUp'
+            ? Math.max(0, index - 1)
+            : Math.min(options.length - 1, index + 1);
+        selectValue(unit, Number(options[nextIndex].dataset.value), true);
+      });
+    });
+
+    function openPicker() {
+      var typedDate = parseDate(birthdate.value);
+      if (typedDate) selected = typedDate;
+      picker.hidden = false;
+      birthdate.setAttribute('aria-expanded', 'true');
+      window.requestAnimationFrame(function () {
+        paintSelection('day', true);
+        paintSelection('month', true);
+        paintSelection('year', true);
+      });
+    }
+
+    function closePicker() {
+      picker.hidden = true;
+      birthdate.setAttribute('aria-expanded', 'false');
+    }
+
+    birthdate.addEventListener('click', function (event) {
+      event.stopPropagation();
+      if (picker.hidden) openPicker();
+      else closePicker();
+    });
+    birthdate.addEventListener('input', validateManualInput);
+    birthdate.addEventListener('blur', validateManualInput);
+    birthdate.addEventListener('invalid', openPicker);
+    birthdate.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === 'ArrowDown') {
+        event.preventDefault();
+        openPicker();
+      }
+      if (event.key === 'Escape') closePicker();
+    });
+    picker.addEventListener('click', function (event) {
+      event.stopPropagation();
+      var action = event.target.closest('[data-picker-action]');
+      if (!action) return;
+      if (action.dataset.pickerAction === 'done') {
+        birthdate.value =
+          selected.day + ' ' + months[selected.month - 1] + ' ' + selected.year;
+        validateManualInput();
+        birthdate.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      closePicker();
+      birthdate.focus();
+    });
+    document.addEventListener('click', closePicker);
+  }
+
   function initContactForm() {
     var form = document.getElementById('kontakt-form');
     if (!form) return;
+    var birthdate = document.getElementById('kf-birthdate');
+    if (birthdate) {
+      var today = new Date();
+      var mm = today.getMonth() + 1;
+      var dd = today.getDate();
+      birthdate.setAttribute(
+        'max',
+        today.getFullYear() +
+          '-' +
+          (mm < 10 ? '0' : '') +
+          mm +
+          '-' +
+          (dd < 10 ? '0' : '') +
+          dd
+      );
+      initSafariDatePicker(birthdate);
+    }
     var feedback = document.getElementById('form-feedback');
     var feedbackBody = document.getElementById('form-feedback-body');
     var copyBtn = document.getElementById('form-copy-btn');
@@ -188,7 +467,7 @@
         name: (fd.get('name') || '').toString().trim(),
         email: (fd.get('email') || '').toString().trim(),
         phone: (fd.get('phone') || '').toString().trim(),
-        age: (fd.get('age') || '').toString().trim(),
+        birthdate: (fd.get('birthdate') || '').toString().trim(),
         experience: (fd.get('experience') || '').toString().trim(),
         message: (fd.get('message') || '').toString().trim()
       };
