@@ -1,4 +1,10 @@
+# macOS
 .DS_Store
+
+# Editors
 .idea/
 .vscode/
 *.log
+
+# Design handoff (reference only, not part of the site)
+design_handoff_icke_dev/
