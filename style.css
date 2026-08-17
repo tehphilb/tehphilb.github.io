@@ -1,0 +1,496 @@
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("fonts/ibm-plex-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("fonts/ibm-plex-mono-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --paper: #efe8d8;
+  --paper-2: #f7f1e4;
+  --ink: #161410;
+  --muted: #6a6256;
+  --rule: #cfc6b4;
+  --accent: #b23a1a;
+  --font: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.mesh {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  font-size: 11px;
+  line-height: 1.15;
+  letter-spacing: 0.12em;
+  color: #161410;
+  opacity: 0.07;
+  white-space: pre;
+  user-select: none;
+}
+
+.stage {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding:
+    max(1.25rem, env(safe-area-inset-top))
+    max(0.85rem, env(safe-area-inset-right))
+    max(1.75rem, env(safe-area-inset-bottom))
+    max(0.85rem, env(safe-area-inset-left));
+}
+
+.card {
+  position: relative;
+  width: min(56rem, 100%);
+  background: var(--paper-2);
+  padding: 1.35rem 1.4rem 1.2rem;
+  box-shadow: 10px 12px 0 rgba(22, 20, 16, 0.12);
+  container-type: inline-size;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid var(--ink);
+  pointer-events: none;
+}
+
+.card__chrome {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  line-height: 1.05;
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.card__head {
+  position: relative;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.stamp {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.kicker {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+h1 {
+  margin: 0;
+}
+
+.logo-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+  scrollbar-width: none;
+}
+
+.logo-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.logo {
+  margin: 0;
+  font-size: clamp(0.4rem, 2.45vw, 0.78rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+@supports (font-size: 1cqi) {
+  .logo {
+    font-size: clamp(0.42rem, 3.05cqi, 0.78rem);
+  }
+}
+
+.lede {
+  min-height: 2.6em;
+  margin: 1rem 0 0;
+  max-width: 42rem;
+  font-size: 0.95rem;
+}
+
+.cursor {
+  display: inline-block;
+  margin-left: 1px;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.section-label {
+  margin: 1.4rem 0 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.7rem;
+  max-width: 100%;
+}
+
+.project {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--paper-2);
+  border: 0;
+  padding: 0;
+}
+
+.project pre {
+  margin: 0;
+  padding: 0.15rem 0.1rem;
+  font-size: clamp(0.58rem, 2.15cqi, 0.72rem);
+  line-height: 1.18;
+  white-space: pre;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.project:hover pre,
+.project:focus-visible pre,
+.project.is-active pre {
+  background: var(--ink);
+  color: var(--paper-2);
+}
+
+.card__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed var(--rule);
+  font-size: 0.78rem;
+}
+
+.card__foot a {
+  color: var(--accent);
+  font-weight: 600;
+  text-underline-offset: 0.2em;
+}
+
+.hint {
+  color: var(--muted);
+}
+
+.touch-btn {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  padding: 0.35rem 0.15rem;
+  cursor: pointer;
+}
+
+.touch-btn:hover,
+.touch-btn:focus-visible {
+  background: var(--ink);
+  color: var(--paper-2);
+}
+
+.touch-btn--solid {
+  color: var(--accent);
+}
+
+.touch-btn:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.touch {
+  width: min(28rem, calc(100% - 1.25rem));
+  max-height: min(40rem, calc(100dvh - 1.5rem));
+  padding: 0;
+  border: 1px solid var(--ink);
+  background: var(--paper-2);
+  box-shadow: 10px 12px 0 rgba(22, 20, 16, 0.12);
+  color: var(--ink);
+  overflow: auto;
+}
+
+.touch::backdrop {
+  background: rgba(22, 20, 16, 0.35);
+}
+
+.touch__form {
+  padding: 1.1rem 1.15rem 1.2rem;
+}
+
+.touch__title {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.touch__note {
+  margin: 0 0 1rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.touch__label {
+  display: block;
+  margin: 0.65rem 0 0.3rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.touch__input {
+  display: block;
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 0.7rem 0.65rem;
+  border-radius: 0;
+}
+
+.touch__input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.touch__input--area {
+  resize: vertical;
+  min-height: 8rem;
+}
+
+.touch__honey {
+  position: absolute;
+  left: -9999px;
+  height: 0;
+  width: 0;
+  opacity: 0;
+}
+
+.touch__status {
+  min-height: 1.3em;
+  margin: 0.85rem 0 0;
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.touch__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+}
+
+.touch__consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin: 0.9rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.touch__consent input {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.touch__consent a {
+  color: var(--accent);
+}
+
+.legal-nav {
+  width: min(56rem, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  font-size: 0.78rem;
+}
+
+.legal-nav a {
+  color: var(--muted);
+  text-underline-offset: 0.2em;
+}
+
+.legal-nav a:hover {
+  color: var(--ink);
+}
+
+.legal-page {
+  max-width: 42rem;
+}
+
+.legal-page h1 {
+  font-size: 1.15rem;
+  margin: 0 0 1rem;
+}
+
+.legal-page h2 {
+  font-family: var(--font);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 1.6rem 0 0.5rem;
+}
+
+.legal-page p,
+.legal-page li {
+  font-size: 0.92rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.legal-page ul {
+  padding-left: 1.1rem;
+}
+
+.fill-in {
+  background: #f3e0c8;
+  padding: 0.05em 0.2em;
+}
+
+@media (max-width: 720px) {
+  .card {
+    padding: 1rem 0.85rem 1rem;
+    box-shadow: 6px 8px 0 rgba(22, 20, 16, 0.12);
+  }
+
+  .card::before {
+    inset: 5px;
+  }
+
+  .card__chrome {
+    font-size: 0.62rem;
+  }
+
+  .meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    font-size: 0.7rem;
+  }
+
+  .lede {
+    font-size: 0.9rem;
+    min-height: 0;
+  }
+
+  .logo {
+    font-size: clamp(0.38rem, 3.2cqi, 0.62rem);
+  }
+
+  .card__foot {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .hint {
+    display: none;
+  }
+
+  .touch-btn {
+    min-height: 2.75rem;
+    width: 100%;
+    text-align: left;
+    padding: 0.55rem 0.4rem;
+  }
+
+  .touch__title {
+    white-space: normal;
+  }
+
+  .touch__form {
+    padding: 1rem 0.9rem 1.1rem;
+  }
+
+  .touch__input--area {
+    min-height: 6.5rem;
+  }
+
+  .legal-page {
+    padding-right: 0.9rem;
+    padding-left: 0.9rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .logo {
+    font-size: clamp(0.34rem, 2.85cqi, 0.5rem);
+  }
+}
