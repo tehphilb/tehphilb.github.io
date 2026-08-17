@@ -1,0 +1,31 @@
+:root{
+  /* Character-grid derived: 1 unit = ~half a monospace line */
+  --space-1: 5px;
+  --space-2: 8px;
+  --space-3: 10px;
+  --space-4: 14px;
+  --space-5: 18px;
+  --space-6: 22px;
+  --space-7: 26px;
+  --space-8: 34px;
+  --space-9: 44px;
+  --space-10: 56px;
+
+  --pad-panel: var(--space-5) 20px;
+  --pad-button: var(--space-4) var(--space-6);
+  --pad-input: 11px 13px;
+  --pad-page: var(--space-9) 52px;
+
+  --gap-stack: var(--space-4);
+  --gap-column: var(--space-7);
+  --gap-columns: var(--space-10);
+
+  --measure-bio: 420px;
+  --width-sidebar: 460px;
+  --width-dialog: 620px;
+  --max-page: 1280px;
+
+  /* No radii anywhere. Corners are square; ASCII has no curves. */
+  --radius: 0px;
+  --border-width: 1px;
+}

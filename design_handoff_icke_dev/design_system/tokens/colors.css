@@ -1,0 +1,44 @@
+:root{
+  /* Base */
+  --void: #08080c;        /* page */
+  --void-2: #0a0a12;      /* dialog, raised dark */
+  --cyan: #57e0d9;        /* primary accent, structure, links */
+  --cyan-dim: #194a47;    /* the ASCII field behind everything */
+  --pink: #ff5fa2;        /* secondary accent, actions, status */
+  --paper: #dff5f3;       /* text */
+
+  /* Alpha ramps off the two text/accent colors */
+  --paper-72: rgba(223,245,243,.72);
+  --paper-60: rgba(223,245,243,.60);
+  --paper-50: rgba(223,245,243,.50);
+  --paper-35: rgba(223,245,243,.35);
+  --paper-25: rgba(223,245,243,.25);
+  --cyan-35: rgba(87,224,217,.35);
+  --cyan-30: rgba(87,224,217,.30);
+  --cyan-06: rgba(87,224,217,.06);
+  --pink-60: rgba(255,95,162,.60);
+
+  /* Semantic */
+  --surface-page: var(--void);
+  --surface-panel: rgba(10,24,26,.60);
+  --surface-panel-hover: rgba(14,40,42,.78);
+  --surface-dialog: var(--void-2);
+  --surface-input: var(--cyan-06);
+  --scrim: rgba(4,4,8,.72);
+
+  --text-body: var(--paper);
+  --text-muted: var(--paper-60);
+  --text-faint: var(--paper-35);
+  --text-accent: var(--cyan);
+  --text-action: var(--pink);
+
+  --border-panel: var(--cyan-30);
+  --border-panel-active: var(--cyan);
+  --border-input: var(--cyan-35);
+  --border-quiet: var(--paper-25);
+
+  --glow-cyan: 0 0 22px rgba(87,224,217,.45);
+  --glow-cyan-soft: 0 0 18px rgba(87,224,217,.50);
+  --veil: radial-gradient(110% 70% at 30% 0%, rgba(8,8,12,.05), rgba(8,8,12,.93) 65%);
+  --rule-pink: linear-gradient(90deg, rgba(255,95,162,.6), transparent);
+}

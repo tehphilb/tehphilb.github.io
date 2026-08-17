@@ -1,112 +1,114 @@
 <!doctype html>
 <html lang="de">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>icke.dev</title>
-    <meta name="description" content="icke.dev — ASCII card. Selected projects." />
-    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="mesh" id="mesh" aria-hidden="true"></div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>icke.dev</title>
+  <meta name="description" content="icke.dev — ASCII card. Selected projects.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/ibm-plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/ibm-plex-mono-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<pre id="rain" aria-hidden="true"></pre>
+<div id="veil" aria-hidden="true"></div>
 
-    <main class="stage">
-      <article class="card" id="card">
-        <pre class="card__chrome" id="chrome"></pre>
+<main>
+  <div class="col">
+    <div class="meta">
+      <span>portfolio / card</span>
+      <span class="on">● online</span>
+    </div>
+    <h1>
+      <pre aria-label="icke.dev"> ██╗ ██████╗██╗  ██╗███████╗   ██████╗ ███████╗██╗   ██╗
+ ██║██╔════╝██║ ██╔╝██╔════╝   ██╔══██╗██╔════╝██║   ██║
+ ██║██║     █████╔╝ █████╗     ██║  ██║█████╗  ██║   ██║
+ ██║██║     ██╔═██╗ ██╔══╝     ██║  ██║██╔══╝  ╚██╗ ██╔╝
+ ██║╚██████╗██║  ██╗███████╗██╗██████╔╝███████╗ ╚████╔╝
+ ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝╚═════╝ ╚══════╝  ╚═══╝</pre>
+    </h1>
+    <p class="bio">websites. tools. ideen. was gebaut wird, entscheidet das problem — nicht das framework.</p>
+    <div class="facts">
+      <div><b>mail</b><span data-site="email">info@icke.dev</span></div>
+      <div><b>stack</b>html · css · js</div>
+      <div><b>status</b>offen fuer anfragen</div>
+    </div>
+    <div class="bottom">
+      <button class="btn" id="open-touch">[ get in touch ]</button>
+      <div class="legal">
+        <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a><br>
+        Taste 1 oeffnet das Projekt
+      </div>
+    </div>
+  </div>
 
-        <header class="card__head">
-          <p class="meta">
-            <span class="stamp" id="stamp">online</span>
-            <span id="clock"></span>
-          </p>
-          <p class="kicker">[ portfolio / card ]</p>
-          <h1>
-            <div class="logo-wrap">
-            <pre class="logo" aria-label="icke.dev">
-██╗ ██████╗██╗  ██╗███████╗   ██████╗ ███████╗██╗   ██╗
-██║██╔════╝██║ ██╔╝██╔════╝   ██╔══██╗██╔════╝██║   ██║
-██║██║     █████╔╝ █████╗     ██║  ██║█████╗  ██║   ██║
-██║██║     ██╔═██╗ ██╔══╝     ██║  ██║██╔══╝  ╚██╗ ██╔╝
-██║╚██████╗██║  ██╗███████╗██╗██████╔╝███████╗ ╚████╔╝
-╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝╚═════╝ ╚══════╝  ╚═══╝</pre>
-            </div>
-          </h1>
-          <p class="lede"><span id="typed"></span><span class="cursor" aria-hidden="true">█</span></p>
-        </header>
-
-        <section class="projects" aria-labelledby="projects-label">
-          <h2 id="projects-label" class="section-label">// projects</h2>
-          <div class="project-grid" id="projects"></div>
-        </section>
-
-        <footer class="card__foot">
-          <button type="button" class="touch-btn" id="open-touch">
-            [ get in touch ]
-          </button>
-          <span class="hint">Taste 1 oeffnet das Projekt</span>
-        </footer>
-      </article>
-      <nav class="legal-nav" aria-label="Rechtliches">
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-      </nav>
-    </main>
-
-    <dialog class="touch" id="touch" aria-labelledby="touch-title">
-      <form class="touch__form" id="touch-form" novalidate>
-        <p class="touch__title" id="touch-title">┌ get in touch ─────────────</p>
-        <p class="touch__note">
-          Pflichtfelder: E-Mail und Anliegen. Die Nachricht wird an
-          <span data-site="email">info@icke.dev</span>
-          ueber Google (USA) zugestellt. Details in der
-          <a href="datenschutz.html">Datenschutzerklaerung</a>.
-        </p>
-
-        <label class="touch__label" for="touch-email">email</label>
-        <input
-          class="touch__input"
-          id="touch-email"
-          name="email"
-          type="email"
-          required
-          autocomplete="email"
-          placeholder="du@example.com"
-        />
-
-        <label class="touch__label" for="touch-message">anliegen</label>
-        <textarea
-          class="touch__input touch__input--area"
-          id="touch-message"
-          name="anliegen"
-          required
-          rows="6"
-          placeholder="worum geht es?"
-        ></textarea>
-
-        <label class="touch__consent">
-          <input id="touch-consent" name="consent" type="checkbox" value="on" required />
-          <span>
-            Ich willige ein, dass meine Angaben zur Bearbeitung der Anfrage verarbeitet und
-            an <span data-site="email">info@icke.dev</span> uebermittelt werden. Die Einwilligung kann ich jederzeit
-            per E-Mail widerrufen.
-            <a href="datenschutz.html">Datenschutz</a>
+  <div class="col">
+    <div class="rule">
+      <span>// projects</span>
+      <span class="rule__line"></span>
+      <span class="rule__count">01</span>
+    </div>
+    <ol class="projects">
+      <li>
+        <button class="proj" aria-expanded="true" data-i="1">
+          <span class="proj__hd">
+            <span class="proj__name">01 · entwicklungsraum-fussball</span>
+            <span class="proj__tags">website · 2024</span>
           </span>
-        </label>
+          <span class="proj__body">
+            <pre class="proj__glyph">┌──────┐
+│░▒▓▒░▒│
+│▒░▒▓░▒│
+└──────┘</pre>
+            <span class="proj__text">
+              talent foerdern. spiel verstehen. entwicklung ermoeglichen.
+              eine website fuer einen fussball-trainer aus hamburg.
+              <a href="https://www.entwicklungsraum-fussball.de" target="_blank" rel="noreferrer">[ projekt oeffnen ↗ ]</a>
+            </span>
+          </span>
+        </button>
+      </li>
+    </ol>
+    <p class="note">weitere projekte folgen.</p>
+  </div>
+</main>
 
-        <input class="touch__honey" type="text" name="_honey" tabindex="-1" autocomplete="off" />
-        <iframe class="touch__honey" name="touch-frame" title="" tabindex="-1"></iframe>
+<dialog id="touch" aria-label="get in touch">
+  <div class="touch__frame">┌ get in touch ─────────────────────────────────</div>
+  <p class="touch__hint">
+    Pflichtfelder: E-Mail und Anliegen. Die Nachricht wird an
+    <span data-site="email">info@icke.dev</span>
+    ueber Google (USA) zugestellt. Details in der
+    <a href="/datenschutz.html">Datenschutzerklaerung</a>.
+  </p>
+  <form class="touch__fields" id="touch-form" novalidate>
+    <label class="touch__lbl" for="touch-email">email</label>
+    <input id="touch-email" type="email" name="email" placeholder="du@beispiel.de" required autocomplete="email">
 
-        <p class="touch__status" id="touch-status" role="status"></p>
+    <label class="touch__lbl" for="touch-message">anliegen</label>
+    <textarea id="touch-message" name="anliegen" rows="4" placeholder="worum geht es?" required></textarea>
 
-        <div class="touch__actions">
-          <button type="submit" class="touch-btn touch-btn--solid" id="touch-send">[ senden ]</button>
-          <button type="button" class="touch-btn" id="close-touch" value="cancel">[ abbrechen ]</button>
-        </div>
-      </form>
-    </dialog>
+    <label class="touch__consent">
+      <input id="touch-consent" name="consent" type="checkbox" value="on" required>
+      <span>Ich willige ein, dass meine Angaben zur Bearbeitung der Anfrage verarbeitet und
+      an <span data-site="email">info@icke.dev</span> uebermittelt werden. Die Einwilligung kann ich jederzeit per E-Mail widerrufen.</span>
+    </label>
 
-    <script src="legal.js"></script>
-    <script src="script.js"></script>
-  </body>
+    <input class="touch__honey" type="text" name="_honey" tabindex="-1" autocomplete="off">
+    <iframe class="touch__honey" name="touch-frame" title="" tabindex="-1"></iframe>
+
+    <p class="touch__status" id="touch-status" role="status"></p>
+
+    <div class="touch__actions">
+      <button class="touch__send" type="submit" id="touch-send">[ senden ]</button>
+      <button class="touch__cancel" type="button" id="close-touch">[ abbrechen ]</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="legal.js"></script>
+<script src="script.js"></script>
+</body>
 </html>

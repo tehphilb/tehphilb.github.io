@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap");
+
+:root{
+  /* One family, two weights. Everything is monospace — the grid is the brand. */
+  --font-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-body: var(--font-mono);
+  --font-display: var(--font-mono);
+
+  --weight-regular: 400;
+  --weight-bold: 700;
+
+  /* Sizes: small set, monospace-safe. */
+  --text-2xs: 10px;   /* legal, footnotes */
+  --text-xs: 11px;    /* eyebrows, labels, meta */
+  --text-sm: 12.5px;  /* facts, tags */
+  --text-base: 14px;  /* body */
+  --text-md: 15px;    /* lead paragraph */
+  --text-lg: 16px;    /* project title */
+  --wordmark-size: 10px; /* ASCII block wordmark, 700 weight */
+
+  --leading-tight: 1.06;  /* ASCII art / char fields */
+  --leading-snug: 1.6;
+  --leading-body: 1.75;
+
+  --tracking-eyebrow: .2em;  /* uppercase eyebrows */
+  --tracking-label: .18em;
+  --tracking-button: .08em;
+  --tracking-field: 2px;     /* ASCII background letter-spacing */
+}

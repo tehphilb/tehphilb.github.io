@@ -1,0 +1,227 @@
+<!-- @dsCard group="Website" viewport="1280x880" name="icke.dev — card" subtitle="Full page: wordmark, projects, contact dialog" -->
+<!-- @startingPoint section="Website" subtitle="ASCII portfolio card, full page" viewport="1280x880" -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>icke.dev</title>
+<meta name="description" content="icke.dev — ASCII card. Selected projects.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+:root{
+  --bg: var(--void);
+  --fg: var(--paper);
+  --accent-cyan: var(--cyan);
+  --accent-pink: var(--pink);
+  --panel: var(--surface-panel);
+  --panel-hi: var(--surface-panel-hover);
+  --line: var(--border-panel);
+  --mono: var(--font-mono);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 14px/1.6 var(--mono);min-height:100vh;overflow-x:hidden}
+a{color:var(--cyan)}
+#rain{position:fixed;inset:0;margin:0;font:400 13px/1.06 var(--mono);color:var(--cyan-dim);letter-spacing:2px;pointer-events:none;user-select:none;overflow:hidden;z-index:0}
+#veil{position:fixed;inset:0;background:radial-gradient(110% 70% at 30% 0%,rgba(8,8,12,.05),rgba(8,8,12,.93) 65%);pointer-events:none;z-index:1}
+main{position:relative;z-index:2;max-width:1280px;margin:0 auto;min-height:100vh;display:grid;grid-template-columns:minmax(320px,460px) minmax(360px,1fr);gap:56px;padding:44px 52px}
+.col{display:flex;flex-direction:column;gap:26px;min-width:0}
+.meta{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+.meta .on{color:var(--pink)}
+h1{margin:20px 0 0}
+h1 pre{margin:0;font:700 10px/1.05 var(--mono);color:var(--cyan);text-shadow:0 0 22px rgba(87,224,217,.45)}
+.bio{font-size:15px;line-height:1.75;color:rgba(223,245,243,.72);max-width:420px;text-wrap:pretty}
+.facts{display:flex;flex-direction:column;gap:8px;font-size:12.5px;color:rgba(223,245,243,.45)}
+.facts div{display:flex;gap:14px}
+.facts b{color:var(--cyan);width:74px;font-weight:400}
+.bottom{margin-top:auto;display:flex;flex-direction:column;gap:16px}
+button{font:inherit;cursor:pointer}
+.btn{background:none;border:1px solid var(--pink);color:var(--pink);padding:14px 22px;font-size:14px;letter-spacing:.08em;align-self:flex-start;transition:background .15s,color .15s}
+.btn:hover,.btn:focus-visible{background:var(--pink);color:var(--bg);outline:none}
+.legal{font-size:11px;color:rgba(223,245,243,.35);line-height:2}
+.legal a{color:rgba(223,245,243,.5);text-decoration:none}
+.legal a:hover{color:var(--cyan)}
+.rule{display:flex;align-items:center;gap:14px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink)}
+.rule span.l{flex:1;height:1px;background:linear-gradient(90deg,rgba(255,95,162,.6),transparent)}
+.rule span.c{color:rgba(223,245,243,.35)}
+ol.projects{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.proj{border:1px solid var(--line);background:var(--panel);width:100%;text-align:left;color:inherit;padding:18px 20px;display:block;transition:border-color .15s,background .15s}
+.proj:hover,.proj[aria-expanded="true"]{border-color:var(--cyan);background:var(--panel-hi)}
+.proj .hd{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.proj .name{font-weight:700;font-size:16px;white-space:nowrap}
+.proj .tags{color:var(--cyan);font-size:12px}
+.proj .body{margin-top:14px;border-top:1px dashed var(--line);padding-top:14px;display:flex;gap:22px;align-items:flex-start;font-size:13px;color:rgba(223,245,243,.6);text-wrap:pretty}
+.proj[aria-expanded="false"] .body{display:none}
+.proj .glyph{margin:0;font:400 11px/1.1 var(--mono);color:rgba(87,224,217,.55)}
+.proj .body a{color:var(--pink);text-decoration:none;display:inline-block;margin-top:10px}
+.proj .body a:hover{color:var(--cyan)}
+.note{margin-top:auto;font-size:11.5px;color:rgba(223,245,243,.3)}
+dialog#contact{border:1px solid var(--pink);background:var(--void-2);color:var(--fg);width:620px;max-width:calc(100vw - 32px);padding:26px 28px;font:400 14px/1.6 var(--mono)}
+dialog#contact::backdrop{background:var(--scrim)}
+dialog#contact .frame{color:var(--pink);font-size:13px;letter-spacing:.06em;white-space:nowrap;overflow:hidden}
+dialog#contact .hint{font-size:11.5px;color:rgba(223,245,243,.5);margin:14px 0 20px;line-height:1.7;text-wrap:pretty}
+form.fields{display:flex;flex-direction:column;gap:14px}
+label.lbl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+input[type=email],textarea{background:rgba(87,224,217,.06);border:1px solid rgba(87,224,217,.35);color:var(--fg);font:400 14px/1.6 var(--mono);padding:11px 13px;resize:none}
+input[type=email]:focus,textarea:focus{outline:none;border-color:var(--cyan)}
+label.consent{display:flex;gap:10px;font-size:11px;line-height:1.7;color:rgba(223,245,243,.5)}
+label.consent input{accent-color:var(--pink);margin-top:2px}
+.actions{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap}
+.send{border:1px solid var(--pink);background:var(--pink);color:var(--bg);padding:11px 20px;font-size:13px}
+.send:hover{background:var(--cyan);border-color:var(--cyan)}
+.cancel{border:1px solid rgba(223,245,243,.25);background:none;color:rgba(223,245,243,.6);padding:11px 20px;font-size:13px}
+.cancel:hover{border-color:var(--fg);color:var(--fg)}
+@media (max-width:1150px){
+  main{grid-template-columns:minmax(0,1fr);gap:34px}
+}
+@media (max-width:900px){
+  main{grid-template-columns:1fr;gap:34px;padding:28px 20px}
+  h1 pre{font-size:6.4px}
+  #rain{font-size:11px;letter-spacing:1px}
+}
+@media (prefers-reduced-motion:reduce){#rain{display:none}}
+</style>
+</head>
+<body>
+<pre id="rain" aria-hidden="true"></pre>
+<div id="veil" aria-hidden="true"></div>
+
+<main>
+  <div class="col">
+    <div class="meta"><span>portfolio / card</span><span class="on">● online</span></div>
+    <h1>
+      <span class="sr" hidden>icke.dev</span>
+      <pre aria-label="icke.dev"> ██╗ ██████╗██╗  ██╗███████╗   ██████╗ ███████╗██╗   ██╗
+ ██║██╔════╝██║ ██╔╝██╔════╝   ██╔══██╗██╔════╝██║   ██║
+ ██║██║     █████╔╝ █████╗     ██║  ██║█████╗  ██║   ██║
+ ██║██║     ██╔═██╗ ██╔══╝     ██║  ██║██╔══╝  ╚██╗ ██╔╝
+ ██║╚██████╗██║  ██╗███████╗██╗██████╔╝███████╗ ╚████╔╝
+ ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝╚═════╝ ╚══════╝  ╚═══╝</pre>
+    </h1>
+    <p class="bio">Platzhalter: zwei Zeilen zur Person — was gebaut wird, fuer wen, womit.</p>
+    <div class="facts">
+      <div><b>mail</b>info@icke.dev</div>
+      <div><b>stack</b>typescript · go · rust</div>
+      <div><b>status</b>offen fuer anfragen</div>
+    </div>
+    <div class="bottom">
+      <button class="btn" id="openContact">[ get in touch ]</button>
+      <div class="legal">
+        <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a><br>
+        Taste 1 oeffnet das Projekt
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="rule"><span>// projects</span><span class="l"></span><span class="c">03</span></div>
+    <ol class="projects" id="projects">
+      <li>
+        <button class="proj" aria-expanded="true" data-i="1">
+          <span class="hd"><span class="name">01 · projekt-eins</span><span class="tags">typescript · 2025</span></span>
+          <span class="body">
+            <pre class="glyph">┌──────┐
+│▓▓▒▒░░│
+│▒▒░░▓▓│
+└──────┘</pre>
+            <span>Platzhalter-Beschreibung: Problem, Ansatz, Ergebnis.<a href="#">[ projekt oeffnen ↗ ]</a></span>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="proj" aria-expanded="false" data-i="2">
+          <span class="hd"><span class="name">02 · projekt-zwei</span><span class="tags">go · docker · 2024</span></span>
+          <span class="body"><span>Platzhalter-Beschreibung.<a href="#">[ projekt oeffnen ↗ ]</a></span></span>
+        </button>
+      </li>
+      <li>
+        <button class="proj" aria-expanded="false" data-i="3">
+          <span class="hd"><span class="name">03 · projekt-drei</span><span class="tags">rust · 2024</span></span>
+          <span class="body"><span>Platzhalter-Beschreibung.<a href="#">[ projekt oeffnen ↗ ]</a></span></span>
+        </button>
+      </li>
+    </ol>
+    <p class="note">Zeilen sind Platzhalter — echte Projektdaten fehlen noch.</p>
+  </div>
+</main>
+
+<dialog id="contact" aria-label="get in touch">
+  <div class="frame">┌ get in touch ─────────────────────────────────</div>
+  <p class="hint">Pflichtfelder: E-Mail und Anliegen. Die Nachricht wird an info@icke.dev ueber Google (USA) zugestellt. Details in der <a href="/datenschutz.html">Datenschutzerklaerung</a>.</p>
+  <form class="fields" method="post" action="#">
+    <label class="lbl" for="email">email</label>
+    <input id="email" type="email" name="email" placeholder="du@beispiel.de" required>
+    <label class="lbl" for="anliegen">anliegen</label>
+    <textarea id="anliegen" name="anliegen" rows="4" placeholder="worum geht es?" required></textarea>
+    <label class="consent"><input type="checkbox" name="consent" required><span>Ich willige ein, dass meine Angaben zur Bearbeitung der Anfrage verarbeitet und an info@icke.dev uebermittelt werden. Die Einwilligung kann ich jederzeit per E-Mail widerrufen.</span></label>
+    <div class="actions">
+      <button class="send" type="submit">[ senden ]</button>
+      <button class="cancel" type="button" id="closeContact">[ abbrechen ]</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var chars = "▁▂▃░▒▓│┤╡╢╖╕║╗╝┐└┴┬├─┼╞╟╚╔╩╦╠═╬01<>/\\{}[]#*.·";
+  var rain = document.getElementById("rain"), t = 0, timer = null;
+
+  function dims() {
+    var cw = 13 * 0.6 + 2, ch = 13 * 1.06;
+    return { w: Math.ceil(window.innerWidth / cw) + 2, h: Math.ceil(window.innerHeight / ch) + 2 };
+  }
+  function frame() {
+    t++;
+    var d = dims(), out = "";
+    for (var y = 0; y < d.h; y++) {
+      for (var x = 0; x < d.w; x++) {
+        var v = Math.sin(x * 0.7 + y * 0.31 + t * 0.22) * Math.cos(x * 0.13 - t * 0.05);
+        out += v > 0.55 ? chars[(x * 7 + y * 3 + t) % chars.length] : " ";
+      }
+      out += "\n";
+    }
+    rain.textContent = out;
+  }
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    frame();
+    timer = setInterval(frame, 110);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { clearInterval(timer); timer = null; }
+      else if (!timer) timer = setInterval(frame, 110);
+    });
+  }
+
+  var projects = [].slice.call(document.querySelectorAll(".proj"));
+  function open(i) {
+    projects.forEach(function (p) {
+      var on = p.dataset.i === String(i) && p.getAttribute("aria-expanded") !== "true";
+      p.setAttribute("aria-expanded", p.dataset.i === String(i) ? String(on || p.getAttribute("aria-expanded") !== "true") : "false");
+    });
+  }
+  projects.forEach(function (p) {
+    p.addEventListener("click", function () {
+      var was = p.getAttribute("aria-expanded") === "true";
+      projects.forEach(function (q) { q.setAttribute("aria-expanded", "false"); });
+      p.setAttribute("aria-expanded", was ? "false" : "true");
+    });
+  });
+
+  var dlg = document.getElementById("contact");
+  document.getElementById("openContact").addEventListener("click", function () { dlg.showModal(); });
+  document.getElementById("closeContact").addEventListener("click", function () { dlg.close(); });
+
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || dlg.open) return;
+    if (/^[1-3]$/.test(e.key)) {
+      var p = document.querySelector('.proj[data-i="' + e.key + '"]');
+      if (p) { p.click(); p.focus(); }
+    }
+  });
+})();
+</script>
+</body>
+</html>
