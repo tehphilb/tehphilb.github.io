@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk '{ if \\(length\\($0\\) > 300\\) print NR\": [long line, \"length\\($0\\)\" chars] \"substr\\($0,1,200\\); else print NR\": \"$0 }' \"/Users/tehphilb/Desktop/Entwicklungsraum Fußball/B42 Abschnitt hell.html\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(python3 -c ' *)",
+      "Bash(sips -g pixelWidth -g pixelHeight \"assets/B42 Press Kit/Website_Assets/B42_Presskit_Website_2.jpg\" \"assets/B42 Press Kit/Website_Assets/B24_Presskit_WebsiteBadge.png\")",
+      "Bash(pkill -f \"http.server 8934\")"
+    ]
+  }
+}
