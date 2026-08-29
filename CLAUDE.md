@@ -14,24 +14,19 @@ Then open http://127.0.0.1:4321/
 
 ## Architecture
 
-Static site with no framework, no package manager, no bundler. Three HTML pages, two JS files, one CSS file.
+Static site with no framework, no package manager, no bundler, and no page-specific JavaScript. Three HTML pages, one JS file, one CSS file.
 
-**Data flow via `site.json`**  
-`site.json` holds the owner's name, address, and email. `legal.js` (loaded first, before `script.js`) fetches this file on every page load and injects values into the DOM wherever `data-site="<key>"` or `data-site-mailto="<key>"` attributes appear. This means `impressum.html` and `datenschutz.html` never hardcode personal data — they just carry those attributes and `legal.js` fills them in.
+**Data flow via `site.json`**
+`site.json` holds the owner's name, address, and email. `legal.js` fetches this file on every page load and injects values into the DOM wherever `data-site="<key>"` or `data-site-mailto="<key>"` attributes appear. This means `index.html`, `impressum.html`, and `datenschutz.html` never hardcode personal data — they just carry those attributes and `legal.js` fills them in.
 
-**`script.js` responsibilities**  
-- `PROJECTS` array at the top — add/remove projects here  
-- ASCII mesh background (`renderMesh`), ASCII card chrome (`renderChrome`), and ASCII project boxes (`renderProjects`) — all use box-drawing characters and recalculate on resize  
-- Typewriter animation (`typeLede`) driven by the `LEDE` constant  
-- Live UTC clock (`tickClock`)  
-- Number-key shortcuts — pressing `1` opens project 1, etc.  
-- Contact form dialog (`bindTouchForm`) — submits via `<form target="touch-frame">` POST to a Google Apps Script web app; URL is `CONTACT_WEBAPP_URL` in `script.js`
+**`index.html`**
+Deliberately minimal: the email address as a giant `mailto:` hero (with a CSS-only blinking caret) and a single project link (entwicklungsraum-fussball.de). Contact happens via `mailto:` — there is no contact form and no backend.
 
-**Contact form backend**  
-`contact.gs` is a Google Apps Script that receives the POST and sends mail via the owner's Gmail. To wire it up: deploy `contact.gs` as a Google Web App (run as: me, access: anyone) and paste the `/exec` URL into `CONTACT_WEBAPP_URL` in `script.js`. After changes to `contact.gs`, redeploy at script.google.com.
+**Design tokens**
+All colors live as custom properties at the top of `style.css` (`--bg`, `--ink`, `--mute`, `--faint`, `--line`, `--accent`). Single accent color (orange) used only for interaction states, the caret, and the header dot.
 
-**Fonts**  
+**Fonts**
 IBM Plex Mono (400 + 600 weights) is self-hosted in `fonts/` — no external font requests, no cookie banner needed.
 
-**Legal pages**  
-`impressum.html` and `datenschutz.html` are standalone pages that both load `legal.js` to hydrate `data-site` placeholders. They link back to each other and to the contact form's Datenschutzerklärung.
+**Legal pages**
+`impressum.html` and `datenschutz.html` are standalone pages that load `legal.js` to hydrate `data-site` placeholders. They share the `.stage` / `.legal-page` styles in `style.css`.
