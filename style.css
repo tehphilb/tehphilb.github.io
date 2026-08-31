@@ -82,9 +82,27 @@ a { color: inherit; }
 .top__mark { font-weight: 600; color: var(--ink); }
 
 .top__dot {
-  width: 8px;
-  height: 8px;
+  position: relative;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
   background: var(--accent);
+  cursor: pointer;
+  appearance: none;
+  display: block;
+  flex-shrink: 0;
+}
+
+.top__dot::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+}
+
+.top__dot[aria-pressed="true"] {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
 }
 
 /* --- labels -------------------------------------------------------- */

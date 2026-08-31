@@ -213,6 +213,7 @@ function flockGeometry(
     gray.fill(0.55);
   }
 
+  const paint = srcCol ? srcCol : gray;
   const vertices = new Float32Array(vertCount * 3 * COUNT);
   const colors = new Float32Array(vertCount * 3 * COUNT);
   const reference = new Float32Array(vertCount * 4 * COUNT);
@@ -221,10 +222,10 @@ function flockGeometry(
 
   for (let b = 0; b < COUNT; b++) {
     vertices.set(srcPos, b * vertCount * 3);
-    colors.set(gray, b * vertCount * 3);
+    colors.set(paint, b * vertCount * 3);
     const seed = Math.random();
-    const rx = (b % WIDTH) / WIDTH;
-    const ry = Math.floor(b / WIDTH) / WIDTH;
+    const rx = (b % WIDTH + 0.5) / WIDTH;
+    const ry = (Math.floor(b / WIDTH) + 0.5) / WIDTH;
     for (let i = 0; i < vertCount; i++) {
       const o = (b * vertCount + i) * 4;
       reference[o] = rx;
@@ -361,6 +362,18 @@ async function startGltfFlock(container, THREE, color) {
   const gpuError = gpuCompute.init();
   if (gpuError !== null) throw new Error(gpuError);
 
+  const chromaData = new Uint8Array(WIDTH * WIDTH * 4);
+  const chromaMap = new THREE.DataTexture(
+    chromaData,
+    WIDTH,
+    WIDTH,
+    THREE.RGBAFormat,
+    THREE.UnsignedByteType,
+  );
+  chromaMap.magFilter = THREE.NearestFilter;
+  chromaMap.minFilter = THREE.NearestFilter;
+  chromaMap.needsUpdate = true;
+
   let materialShader = null;
   const mat = new THREE.MeshStandardMaterial({
     vertexColors: true,
@@ -370,10 +383,12 @@ async function startGltfFlock(container, THREE, color) {
     fog: true,
     side: THREE.DoubleSide,
   });
+  mat.customProgramCacheKey = () => "flock-chroma";
   mat.onBeforeCompile = (shader) => {
     shader.uniforms.texturePosition = { value: null };
     shader.uniforms.textureVelocity = { value: null };
     shader.uniforms.textureAnimation = { value: anim.tex };
+    shader.uniforms.chromaMap = { value: chromaMap };
     shader.uniforms.time = { value: 1 };
     shader.uniforms.size = { value: SIZE };
     shader.uniforms.delta = { value: 0 };
@@ -383,9 +398,11 @@ async function startGltfFlock(container, THREE, color) {
 attribute vec4 reference;
 attribute vec4 seeds;
 attribute vec3 birdColor;
+varying vec2 vRef;
 uniform sampler2D texturePosition;
 uniform sampler2D textureVelocity;
 uniform sampler2D textureAnimation;
+uniform sampler2D chromaMap;
 uniform float size;
 uniform float time;`,
     );
@@ -411,7 +428,24 @@ uniform float time;`,
       newPosition = maty * matz * newPosition;
       newPosition += pos;
       vec3 transformed = vec3( newPosition );
+      vRef = reference.xy;
       `,
+    );
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#define STANDARD",
+      `#define STANDARD
+varying vec2 vRef;
+uniform sampler2D chromaMap;`,
+    );
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#include <color_fragment>",
+      `#if defined( USE_COLOR ) || defined( USE_COLOR_ALPHA )
+	vec3 birdTint = vColor.rgb;
+	float birdLuma = dot( birdTint, vec3( 0.2126, 0.7152, 0.0722 ) );
+	float chroma = texture2D( chromaMap, vRef ).r;
+	diffuseColor.rgb *= mix( vec3( birdLuma ), birdTint, chroma );
+	diffuseColor.a *= vColor.a;
+#endif`,
     );
     materialShader = shader;
   };
@@ -446,6 +480,99 @@ uniform float time;`,
   setSize();
   new ResizeObserver(setSize).observe(container);
 
+  const posBuf = new Float32Array(WIDTH * WIDTH * 4);
+  const ndc = new THREE.Vector3();
+  let heroIndex = -1;
+  let heroChroma = 0;
+  let heroChromaTarget = 0;
+  let heroHovering = false;
+  let heroOffAt = 0;
+  let colorWave = 0;
+  let colorWaveTarget = 0;
+
+  const readPositions = () => {
+    renderer.readRenderTargetPixels(
+      gpuCompute.getCurrentRenderTarget(positionVariable),
+      0,
+      0,
+      WIDTH,
+      WIDTH,
+      posBuf,
+    );
+  };
+
+  const projectBird = (index) => {
+    const o = index * 4;
+    ndc.set(posBuf[o], posBuf[o + 1], posBuf[o + 2]).project(camera);
+    return ndc;
+  };
+
+  const birdInView = (index) => {
+    projectBird(index);
+    return (
+      ndc.z > -1 &&
+      ndc.z < 1 &&
+      ndc.x > -0.95 &&
+      ndc.x < 0.95 &&
+      ndc.y > -0.95 &&
+      ndc.y < 0.95
+    );
+  };
+
+  const pickInFlock = () => {
+    const visible = [];
+    for (let i = 0; i < COUNT; i++) {
+      if (!birdInView(i)) continue;
+      const center = ndc.x * ndc.x + ndc.y * ndc.y;
+      visible.push({ i, center });
+    }
+    if (!visible.length) return (Math.random() * COUNT) | 0;
+    visible.sort((a, b) => a.center - b.center);
+    const n = Math.min(24, visible.length);
+    return visible[(Math.random() * n) | 0].i;
+  };
+
+  const onHeroOn = () => {
+    heroHovering = true;
+    heroChromaTarget = 1;
+    if (heroIndex >= 0) return;
+    try {
+      readPositions();
+    } catch {
+      /* float readback fehlt */
+    }
+    heroIndex = pickInFlock();
+  };
+
+  const onHeroOff = () => {
+    heroHovering = false;
+    heroOffAt = performance.now();
+  };
+
+  const mailWrap = document.querySelector(".hero__mail");
+  if (mailWrap) {
+    mailWrap.addEventListener("pointerenter", onHeroOn);
+    mailWrap.addEventListener("pointerleave", onHeroOff);
+    mailWrap.addEventListener("mouseenter", onHeroOn);
+    mailWrap.addEventListener("mouseleave", onHeroOff);
+    const mail = mailWrap.querySelector("a");
+    if (mail) {
+      mail.addEventListener("focus", onHeroOn);
+      mail.addEventListener("blur", onHeroOff);
+    }
+  }
+
+  const dot = document.querySelector(".top__dot");
+  if (dot) {
+    dot.addEventListener("click", () => {
+      colorWaveTarget = colorWaveTarget > 0.5 ? 0 : 1;
+      dot.setAttribute(
+        "aria-pressed",
+        colorWaveTarget > 0.5 ? "true" : "false",
+      );
+    });
+  }
+
   let last = performance.now();
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -453,6 +580,48 @@ uniform float time;`,
     let delta = (now - last) / 1000;
     if (delta > 1) delta = 1;
     last = now;
+
+    const waveStep = delta / 1.6;
+    if (colorWave < colorWaveTarget) {
+      colorWave = Math.min(colorWaveTarget, colorWave + waveStep);
+    } else if (colorWave > colorWaveTarget) {
+      colorWave = Math.max(colorWaveTarget, colorWave - waveStep);
+    }
+
+    const chromaRate = heroChromaTarget > heroChroma ? 8 : 3;
+    heroChroma +=
+      (heroChromaTarget - heroChroma) * Math.min(1, delta * chromaRate);
+    if (heroChroma < 0.004 && heroChromaTarget === 0) {
+      heroChroma = 0;
+      heroIndex = -1;
+    }
+
+    for (let i = 0; i < COUNT; i++) {
+      const stagger = (i * 0.61803398875) % 1;
+      const t = (colorWave - stagger * 0.55) / 0.4;
+      let c = t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
+      if (i === heroIndex) c = Math.max(c, heroChroma);
+      chromaData[i * 4] = (c * 255) | 0;
+    }
+    chromaMap.needsUpdate = true;
+
+    if (!heroHovering && heroIndex >= 0 && heroChromaTarget > 0) {
+      try {
+        readPositions();
+        if (!birdInView(heroIndex)) heroChromaTarget = 0;
+      } catch {
+        if (heroOffAt > 0 && now - heroOffAt > 3500) heroChromaTarget = 0;
+      }
+    }
+    if (
+      !heroHovering &&
+      heroIndex >= 0 &&
+      heroOffAt > 0 &&
+      now - heroOffAt > 8000
+    ) {
+      heroChromaTarget = 0;
+    }
+
     positionUniforms.time.value = now;
     positionUniforms.delta.value = delta;
     velocityUniforms.time.value = now;
@@ -464,6 +633,7 @@ uniform float time;`,
         gpuCompute.getCurrentRenderTarget(positionVariable).texture;
       materialShader.uniforms.textureVelocity.value =
         gpuCompute.getCurrentRenderTarget(velocityVariable).texture;
+      materialShader.uniforms.chromaMap.value = chromaMap;
     }
     if (pointerLive) {
       raycaster.setFromCamera(pointer, camera);
