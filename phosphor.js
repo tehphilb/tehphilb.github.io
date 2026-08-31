@@ -276,7 +276,7 @@ async function startGltfFlock(container, THREE, color) {
   const anim = bakeFlap(THREE, birdGeo, gltf.animations);
 
   const WIDTH = 20;
-  const COUNT = 350;
+  const COUNT = 315;
   const BOUNDS = 520;
   const BOUNDS_HALF = BOUNDS / 2;
   const SIZE = 0.26;
