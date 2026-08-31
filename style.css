@@ -19,20 +19,26 @@
 :root {
   color-scheme: dark;
 
-  --bg:     #0b0b0a;
-  --ink:    #e9e7e2;
-  --mute:   #75726b;
-  --faint:  #4a4843;
-  --line:   #24231f;
+  --bg: #0b0b0a;
+  --ink: #e9e7e2;
+  --mute: #75726b;
+  --faint: #4a4843;
+  --line: #24231f;
   --accent: #33d133; /* Phosphor-Gruen alter Monochrom-CRTs, leicht gedimmt */
 
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --mono:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 /* --- reset -------------------------------------------------------- */
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-html, body {
+html,
+body {
   margin: 0;
   min-height: 100%;
   -webkit-text-size-adjust: 100%;
@@ -50,7 +56,9 @@ body {
   color: var(--bg);
 }
 
-a { color: inherit; }
+a {
+  color: inherit;
+}
 
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -69,17 +77,31 @@ a { color: inherit; }
   flex-direction: column;
 }
 
+.page > :not(.top) {
+  opacity: 1;
+  transition: opacity 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.page.is-idle > :not(.top) {
+  opacity: 0.12;
+  transition-duration: 2.8s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* --- top ----------------------------------------------------------- */
 .top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 13px;
-  letter-spacing: .12em;
+  letter-spacing: 0.12em;
   color: var(--mute);
 }
 
-.top__mark { font-weight: 600; color: var(--ink); }
+.top__mark {
+  font-weight: 600;
+  color: var(--ink);
+}
 
 .top__dot {
   position: relative;
@@ -107,9 +129,9 @@ a { color: inherit; }
 
 /* --- labels -------------------------------------------------------- */
 .label {
-  margin: 0 0 .9em;
+  margin: 0 0 0.9em;
   font-size: 11px;
-  letter-spacing: .28em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--faint);
 }
@@ -131,24 +153,30 @@ a { color: inherit; }
 
 .hero__mail a {
   text-decoration: none;
-  transition: color .15s linear;
+  transition: color 0.15s linear;
 }
 
-.hero__mail a:hover { color: var(--accent); }
+.hero__mail a:hover {
+  color: var(--accent);
+}
 
 .caret {
   /* volle Zeichenzelle von IBM Plex Mono:
      Breite = Dickte (.6em), Hoehe = Ober- + Unterlaenge (.78em + .22em),
      sitzt .22em unter der Grundlinie wie ein echter Terminal-Cursor */
   display: inline-block;
-  width: .6em;
+  width: 0.6em;
   height: 1em;
-  vertical-align: -.22em;
+  vertical-align: -0.22em;
   background: var(--accent);
   animation: blink 1.1s steps(1) infinite;
 }
 
-@keyframes blink { 50% { opacity: 0; } }
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
 
 /* --- phosphor: three.js-Schwarm ------------------------------------ */
 .phosphor {
@@ -166,7 +194,61 @@ a { color: inherit; }
   height: 100%;
 }
 
-/* --- the project ---------------------------------------------------- */
+/* --- projects ------------------------------------------------------- */
+.work__sum {
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: none;
+  text-align: left;
+  appearance: none;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.work__toggle {
+  display: inline-block;
+  color: var(--mute);
+  font-size: clamp(17px, 2.4vw, 24px);
+  line-height: 1;
+  transition:
+    color 0.15s linear,
+    rotate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work__toggle::before {
+  content: "+";
+}
+
+.work__sum[aria-expanded="true"] .work__toggle {
+  rotate: 45deg;
+}
+
+.work__sum:hover .work__toggle {
+  color: var(--accent);
+}
+
+.work__list {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work__sum[aria-expanded="true"] + .work__list {
+  grid-template-rows: 1fr;
+}
+
+.work__list-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.work__list .proj {
+  border-top: 0;
+}
+
 .proj {
   display: flex;
   align-items: baseline;
@@ -175,15 +257,13 @@ a { color: inherit; }
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   text-decoration: none;
-  transition: border-color .15s linear;
+  transition: border-color 0.15s linear;
 }
-
-.proj + .label { margin-top: 2.4rem; }
 
 .proj__name {
   font-weight: 600;
   font-size: clamp(17px, 2.4vw, 24px);
-  transition: color .15s linear;
+  transition: color 0.15s linear;
 }
 
 .proj__meta {
@@ -196,11 +276,17 @@ a { color: inherit; }
 .proj__arrow {
   color: var(--mute);
   font-size: clamp(17px, 2.4vw, 24px);
-  transition: color .15s linear, translate .15s ease-out;
+  transition:
+    color 0.15s linear,
+    translate 0.15s ease-out;
 }
 
-.proj:hover { border-color: var(--accent); }
-.proj:hover .proj__name { color: var(--accent); }
+.proj:hover {
+  border-color: var(--accent);
+}
+.proj:hover .proj__name {
+  color: var(--accent);
+}
 
 .proj:hover .proj__arrow {
   color: var(--accent);
@@ -218,10 +304,12 @@ a { color: inherit; }
 .foot a {
   color: var(--faint);
   text-decoration: none;
-  transition: color .15s linear;
+  transition: color 0.15s linear;
 }
 
-.foot a:hover { color: var(--ink); }
+.foot a:hover {
+  color: var(--ink);
+}
 
 /* --- legal pages ----------------------------------------------------- */
 .stage {
@@ -236,7 +324,7 @@ a { color: inherit; }
 .kicker {
   margin: 0 0 3rem;
   font-size: 13px;
-  letter-spacing: .12em;
+  letter-spacing: 0.12em;
 }
 
 .legal-page .kicker a {
@@ -244,7 +332,9 @@ a { color: inherit; }
   text-decoration: none;
 }
 
-.legal-page .kicker a:hover { color: var(--accent); }
+.legal-page .kicker a:hover {
+  color: var(--accent);
+}
 
 .legal-page h1 {
   margin: 0 0 1.5rem;
@@ -254,28 +344,30 @@ a { color: inherit; }
 }
 
 .legal-page h2 {
-  margin: 2.4rem 0 .6rem;
+  margin: 2.4rem 0 0.6rem;
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: .28em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--faint);
 }
 
 .legal-page p,
 .legal-page li {
-  margin: 0 0 .6rem;
+  margin: 0 0 0.6rem;
   font-size: 14px;
   color: var(--mute);
   overflow-wrap: anywhere;
 }
 
-.legal-page ul { padding-left: 1.2rem; }
+.legal-page ul {
+  padding-left: 1.2rem;
+}
 
 .legal-page a {
   color: var(--ink);
   text-decoration: underline;
-  text-underline-offset: .2em;
+  text-underline-offset: 0.2em;
   text-decoration-color: var(--faint);
 }
 
@@ -284,7 +376,9 @@ a { color: inherit; }
   text-decoration-color: var(--accent);
 }
 
-.fill-in { background: rgba(51, 209, 51, .14); }
+.fill-in {
+  background: rgba(51, 209, 51, 0.14);
+}
 
 .legal-nav {
   margin-top: auto;
@@ -299,8 +393,12 @@ a { color: inherit; }
   text-decoration: none;
 }
 
-.legal-nav a:hover { color: var(--ink); }
-.legal-nav a[aria-current="page"] { color: var(--mute); }
+.legal-nav a:hover {
+  color: var(--ink);
+}
+.legal-nav a[aria-current="page"] {
+  color: var(--mute);
+}
 
 /* --- responsive ------------------------------------------------------ */
 @media (max-width: 560px) {
@@ -314,9 +412,19 @@ a { color: inherit; }
     flex-basis: 100%;
     order: 3;
   }
+
+  .work__sum .proj__meta {
+    margin-left: auto;
+    flex-basis: auto;
+    order: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .caret { animation: none; }
-  * { transition: none !important; }
+  .caret {
+    animation: none;
+  }
+  * {
+    transition: none !important;
+  }
 }

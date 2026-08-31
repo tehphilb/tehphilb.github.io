@@ -4,6 +4,31 @@
 
 const container = document.querySelector(".phosphor");
 if (container) init(container);
+idleScreen(document.querySelector(".page"));
+foldProjects(document.querySelector(".work__fold"));
+
+function idleScreen(page) {
+  if (!page) return;
+  const idleMs = 17000;
+  let timer = 0;
+  const wake = () => {
+    page.classList.remove("is-idle");
+    clearTimeout(timer);
+    timer = setTimeout(() => page.classList.add("is-idle"), idleMs);
+  };
+  window.addEventListener("pointermove", wake, { passive: true });
+  wake();
+}
+
+function foldProjects(fold) {
+  if (!fold) return;
+  const sum = fold.querySelector(".work__sum");
+  if (!sum) return;
+  sum.addEventListener("click", () => {
+    const open = sum.getAttribute("aria-expanded") === "true";
+    sum.setAttribute("aria-expanded", open ? "false" : "true");
+  });
+}
 
 function tokens() {
   const s = getComputedStyle(document.documentElement);
@@ -241,7 +266,7 @@ function flockGeometry(
     vertices.set(srcPos, b * vertCount * 3);
     colors.set(paint, b * vertCount * 3);
     const seed = Math.random();
-    const rx = (b % WIDTH + 0.5) / WIDTH;
+    const rx = ((b % WIDTH) + 0.5) / WIDTH;
     const ry = (Math.floor(b / WIDTH) + 0.5) / WIDTH;
     for (let i = 0; i < vertCount; i++) {
       const o = (b * vertCount + i) * 4;
@@ -512,9 +537,7 @@ uniform sampler2D chromaMap;`,
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     velocityUniforms.aspect.value = camera.aspect;
-    velocityUniforms.tanHalfFov.value = Math.tan(
-      (camera.fov * Math.PI) / 360,
-    );
+    velocityUniforms.tanHalfFov.value = Math.tan((camera.fov * Math.PI) / 360);
     velocityUniforms.cameraZ.value = camera.position.z;
   };
   setSize();
@@ -556,7 +579,7 @@ uniform sampler2D chromaMap;`,
     if (delta > 1) delta = 1;
     last = now;
 
-    const waveStep = delta / 1.6;
+    const waveStep = delta / 3.2;
     if (colorWave < colorWaveTarget) {
       colorWave = Math.min(colorWaveTarget, colorWave + waveStep);
     } else if (colorWave > colorWaveTarget) {
@@ -565,7 +588,7 @@ uniform sampler2D chromaMap;`,
 
     for (let i = 0; i < COUNT; i++) {
       const stagger = (i * 0.61803398875) % 1;
-      const t = (colorWave - stagger * 0.55) / 0.4;
+      const t = (colorWave - stagger * 0.22) / 0.78;
       let c = t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
       if (i === heroIndex) c = 1;
       chromaData[i * 4] = (c * 255) | 0;

@@ -56,29 +56,43 @@
         </h1>
       </section>
 
-      <section class="work" aria-label="Projekte">
-        <p class="label">projekt 01 / 02</p>
-        <a
-          class="proj"
-          href="https://www.entwicklungsraum-fussball.de"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span class="proj__name">entwicklungsraum-fussball</span>
-          <span class="proj__meta">website — html, js</span>
-          <span class="proj__arrow" aria-hidden="true">&nearr;</span>
-        </a>
-        <p class="label">projekt 02 / 02</p>
-        <a
-          class="proj"
-          href="https://turnierradar.de"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span class="proj__name">turnierradar</span>
-          <span class="proj__meta">app — contributed, flutter, ios / android</span>
-          <span class="proj__arrow" aria-hidden="true">&nearr;</span>
-        </a>
+      <section class="work" aria-label="Projects">
+        <div class="work__fold">
+          <button
+            type="button"
+            class="proj work__sum"
+            aria-expanded="false"
+            aria-controls="project-list"
+          >
+            <span class="proj__name">projects</span>
+            <span class="proj__meta">02</span>
+            <span class="work__toggle" aria-hidden="true"></span>
+          </button>
+          <div class="work__list" id="project-list">
+            <div class="work__list-inner">
+              <a
+                class="proj"
+                href="https://www.entwicklungsraum-fussball.de"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span class="proj__name">entwicklungsraum-fussball</span>
+                <span class="proj__meta">website — html, js</span>
+                <span class="proj__arrow" aria-hidden="true">&nearr;</span>
+              </a>
+              <a
+                class="proj"
+                href="https://turnierradar.de"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span class="proj__name">turnierradar</span>
+                <span class="proj__meta">app — contributed, flutter, ios / android</span>
+                <span class="proj__arrow" aria-hidden="true">&nearr;</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </section>
 
       <footer class="foot">
