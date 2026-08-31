@@ -383,7 +383,7 @@ async function startGltfFlock(container, THREE, color) {
     fog: true,
     side: THREE.DoubleSide,
   });
-  mat.customProgramCacheKey = () => "flock-chroma";
+  mat.customProgramCacheKey = () => "flock-chroma-vary";
   mat.onBeforeCompile = (shader) => {
     shader.uniforms.texturePosition = { value: null };
     shader.uniforms.textureVelocity = { value: null };
@@ -399,6 +399,7 @@ attribute vec4 reference;
 attribute vec4 seeds;
 attribute vec3 birdColor;
 varying vec2 vRef;
+varying float vSeed;
 uniform sampler2D texturePosition;
 uniform sampler2D textureVelocity;
 uniform sampler2D textureAnimation;
@@ -415,7 +416,8 @@ uniform float time;`,
       vec3 aniPos = texture2D( textureAnimation, vec2( reference.z, mod( time + ( seeds.x ) * ( ( 0.0004 + seeds.y / 10000.0 ) + length( velocity ) / 20000.0 ), reference.w ) ) ).xyz;
       vec3 newPosition = position;
       newPosition = mat3( modelMatrix ) * ( newPosition + aniPos );
-      newPosition *= size + seeds.y * size * 0.2;
+      float heroScale = texture2D( chromaMap, reference.xy ).g;
+      newPosition *= size * ( 1.0 + heroScale * 0.55 ) + seeds.y * size * 0.2;
       velocity.z *= -1.0;
       float xz = length( velocity.xz );
       float x = sqrt( max( 1.0 - velocity.y * velocity.y, 0.0 ) );
@@ -429,19 +431,30 @@ uniform float time;`,
       newPosition += pos;
       vec3 transformed = vec3( newPosition );
       vRef = reference.xy;
+      vSeed = seeds.y;
       `,
     );
     shader.fragmentShader = shader.fragmentShader.replace(
       "#define STANDARD",
       `#define STANDARD
 varying vec2 vRef;
+varying float vSeed;
 uniform sampler2D chromaMap;`,
     );
     shader.fragmentShader = shader.fragmentShader.replace(
       "#include <color_fragment>",
       `#if defined( USE_COLOR ) || defined( USE_COLOR_ALPHA )
 	vec3 birdTint = vColor.rgb;
-	float birdLuma = dot( birdTint, vec3( 0.2126, 0.7152, 0.0722 ) );
+	float hue = ( vSeed - 0.5 ) * 0.7;
+	vec3 axis = vec3( 0.57735 );
+	float ca = cos( hue );
+	float sa = sin( hue );
+	birdTint = birdTint * ca + cross( axis, birdTint ) * sa + axis * dot( axis, birdTint ) * ( 1.0 - ca );
+	float sat = mix( 0.78, 1.16, fract( vSeed * 7.13 ) );
+	float val = mix( 0.86, 1.14, fract( vSeed * 3.71 ) );
+	float tintLuma = dot( birdTint, vec3( 0.2126, 0.7152, 0.0722 ) );
+	birdTint = mix( vec3( tintLuma ), birdTint, sat ) * val;
+	float birdLuma = dot( vColor.rgb, vec3( 0.2126, 0.7152, 0.0722 ) );
 	float chroma = texture2D( chromaMap, vRef ).r;
 	diffuseColor.rgb *= mix( vec3( birdLuma ), birdTint, chroma );
 	diffuseColor.a *= vColor.a;
@@ -486,7 +499,6 @@ uniform sampler2D chromaMap;`,
   let heroChroma = 0;
   let heroChromaTarget = 0;
   let heroHovering = false;
-  let heroOffAt = 0;
   let colorWave = 0;
   let colorWaveTarget = 0;
 
@@ -501,35 +513,23 @@ uniform sampler2D chromaMap;`,
     );
   };
 
-  const projectBird = (index) => {
-    const o = index * 4;
-    ndc.set(posBuf[o], posBuf[o + 1], posBuf[o + 2]).project(camera);
-    return ndc;
-  };
-
-  const birdInView = (index) => {
-    projectBird(index);
-    return (
-      ndc.z > -1 &&
-      ndc.z < 1 &&
-      ndc.x > -0.95 &&
-      ndc.x < 0.95 &&
-      ndc.y > -0.95 &&
-      ndc.y < 0.95
-    );
-  };
-
   const pickInFlock = () => {
     const visible = [];
+    const camZ = camera.position.z;
     for (let i = 0; i < COUNT; i++) {
-      if (!birdInView(i)) continue;
-      const center = ndc.x * ndc.x + ndc.y * ndc.y;
-      visible.push({ i, center });
+      const o = i * 4;
+      const wx = posBuf[o];
+      const wy = posBuf[o + 1];
+      const wz = posBuf[o + 2];
+      ndc.set(wx, wy, wz).project(camera);
+      if (ndc.z <= -1 || ndc.z >= 1) continue;
+      if (Math.abs(ndc.x) > 1.05 || Math.abs(ndc.y) > 1.05) continue;
+      const dist = Math.hypot(wx, wy, wz - camZ);
+      visible.push({ i, dist });
     }
     if (!visible.length) return (Math.random() * COUNT) | 0;
-    visible.sort((a, b) => a.center - b.center);
-    const n = Math.min(24, visible.length);
-    return visible[(Math.random() * n) | 0].i;
+    visible.sort((a, b) => a.dist - b.dist);
+    return visible[0].i;
   };
 
   const onHeroOn = () => {
@@ -546,7 +546,7 @@ uniform sampler2D chromaMap;`,
 
   const onHeroOff = () => {
     heroHovering = false;
-    heroOffAt = performance.now();
+    heroChromaTarget = 0;
   };
 
   const mailWrap = document.querySelector(".hero__mail");
@@ -588,7 +588,7 @@ uniform sampler2D chromaMap;`,
       colorWave = Math.max(colorWaveTarget, colorWave - waveStep);
     }
 
-    const chromaRate = heroChromaTarget > heroChroma ? 8 : 3;
+    const chromaRate = heroChromaTarget > heroChroma ? 10 : 8;
     heroChroma +=
       (heroChromaTarget - heroChroma) * Math.min(1, delta * chromaRate);
     if (heroChroma < 0.004 && heroChromaTarget === 0) {
@@ -602,25 +602,9 @@ uniform sampler2D chromaMap;`,
       let c = t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
       if (i === heroIndex) c = Math.max(c, heroChroma);
       chromaData[i * 4] = (c * 255) | 0;
+      chromaData[i * 4 + 1] = i === heroIndex ? (heroChroma * 255) | 0 : 0;
     }
     chromaMap.needsUpdate = true;
-
-    if (!heroHovering && heroIndex >= 0 && heroChromaTarget > 0) {
-      try {
-        readPositions();
-        if (!birdInView(heroIndex)) heroChromaTarget = 0;
-      } catch {
-        if (heroOffAt > 0 && now - heroOffAt > 3500) heroChromaTarget = 0;
-      }
-    }
-    if (
-      !heroHovering &&
-      heroIndex >= 0 &&
-      heroOffAt > 0 &&
-      now - heroOffAt > 8000
-    ) {
-      heroChromaTarget = 0;
-    }
 
     positionUniforms.time.value = now;
     positionUniforms.delta.value = delta;
