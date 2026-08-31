@@ -42,7 +42,7 @@ function loopControl(reduceMotion, start, stop) {
   });
 }
 
-const BIRD_URL = "models/Parrot.glb";
+const BIRD_URL = new URL("models/Parrot.glb", import.meta.url).href;
 
 const SHADER_POSITION = /* glsl */ `
 uniform float time;
@@ -492,23 +492,15 @@ async function init(container) {
     const THREE = await import("three");
     await startGltfFlock(container, THREE, color);
     return;
-  } catch {
-    container.replaceChildren();
-  }
-  try {
-    const { default: WebGPU } =
-      await import("three/addons/capabilities/WebGPU.js");
-    if (WebGPU.isAvailable()) {
-      await startCompute(container, color);
-      return;
-    }
-  } catch {
+  } catch (err) {
+    console.warn("gltf flock failed", err);
     container.replaceChildren();
   }
   try {
     const THREE = await import("three");
     startCpu(container, THREE, color);
-  } catch {
+  } catch (err) {
+    console.warn("cpu flock failed", err);
     container.replaceChildren();
   }
 }
