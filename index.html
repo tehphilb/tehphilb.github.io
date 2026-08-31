@@ -25,8 +25,19 @@
       crossorigin
     />
     <link rel="stylesheet" href="style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.min.js",
+          "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.webgpu.min.js",
+          "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.tsl.min.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"
+        }
+      }
+    </script>
   </head>
   <body>
+    <div class="phosphor" aria-hidden="true"></div>
     <main class="page">
       <header class="top">
         <span class="top__mark">icke.dev</span>
@@ -62,5 +73,6 @@
       </footer>
     </main>
     <script src="legal.js"></script>
+    <script type="module" src="phosphor.js"></script>
   </body>
 </html>
