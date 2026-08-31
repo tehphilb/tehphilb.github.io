@@ -493,74 +493,22 @@ uniform sampler2D chromaMap;`,
   setSize();
   new ResizeObserver(setSize).observe(container);
 
-  const posBuf = new Float32Array(WIDTH * WIDTH * 4);
-  const ndc = new THREE.Vector3();
-  let heroIndex = -1;
-  let heroChroma = 0;
-  let heroChromaTarget = 0;
-  let heroHovering = false;
-  let colorWave = 0;
-  let colorWaveTarget = 0;
-
-  const readPositions = () => {
-    renderer.readRenderTargetPixels(
-      gpuCompute.getCurrentRenderTarget(positionVariable),
-      0,
-      0,
-      WIDTH,
-      WIDTH,
-      posBuf,
-    );
-  };
-
-  const pickInFlock = () => {
-    const visible = [];
-    const camZ = camera.position.z;
-    for (let i = 0; i < COUNT; i++) {
-      const o = i * 4;
-      const wx = posBuf[o];
-      const wy = posBuf[o + 1];
-      const wz = posBuf[o + 2];
-      ndc.set(wx, wy, wz).project(camera);
-      if (ndc.z <= -1 || ndc.z >= 1) continue;
-      if (Math.abs(ndc.x) > 1.05 || Math.abs(ndc.y) > 1.05) continue;
-      const dist = Math.hypot(wx, wy, wz - camZ);
-      visible.push({ i, dist });
-    }
-    if (!visible.length) return (Math.random() * COUNT) | 0;
-    visible.sort((a, b) => a.dist - b.dist);
-    return visible[0].i;
-  };
-
-  const onHeroOn = () => {
-    heroHovering = true;
-    heroChromaTarget = 1;
-    if (heroIndex >= 0) return;
-    try {
-      readPositions();
-    } catch {
-      /* float readback fehlt */
-    }
-    heroIndex = pickInFlock();
-  };
-
-  const onHeroOff = () => {
-    heroHovering = false;
-    heroChromaTarget = 0;
-  };
-
-  const mailWrap = document.querySelector(".hero__mail");
-  if (mailWrap) {
-    mailWrap.addEventListener("pointerenter", onHeroOn);
-    mailWrap.addEventListener("pointerleave", onHeroOff);
-    mailWrap.addEventListener("mouseenter", onHeroOn);
-    mailWrap.addEventListener("mouseleave", onHeroOff);
-    const mail = mailWrap.querySelector("a");
-    if (mail) {
-      mail.addEventListener("focus", onHeroOn);
-      mail.addEventListener("blur", onHeroOff);
+  let heroIndex = 0;
+  let closest = -Infinity;
+  for (let i = 0; i < COUNT; i++) {
+    const z = pData[i * 4 + 2];
+    if (z > closest) {
+      closest = z;
+      heroIndex = i;
     }
   }
+
+  chromaData[heroIndex * 4] = 255;
+  chromaData[heroIndex * 4 + 1] = 255;
+  chromaMap.needsUpdate = true;
+
+  let colorWave = 0;
+  let colorWaveTarget = 0;
 
   const dot = document.querySelector(".top__dot");
   if (dot) {
@@ -588,21 +536,13 @@ uniform sampler2D chromaMap;`,
       colorWave = Math.max(colorWaveTarget, colorWave - waveStep);
     }
 
-    const chromaRate = heroChromaTarget > heroChroma ? 10 : 8;
-    heroChroma +=
-      (heroChromaTarget - heroChroma) * Math.min(1, delta * chromaRate);
-    if (heroChroma < 0.004 && heroChromaTarget === 0) {
-      heroChroma = 0;
-      heroIndex = -1;
-    }
-
     for (let i = 0; i < COUNT; i++) {
       const stagger = (i * 0.61803398875) % 1;
       const t = (colorWave - stagger * 0.55) / 0.4;
       let c = t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
-      if (i === heroIndex) c = Math.max(c, heroChroma);
+      if (i === heroIndex) c = 1;
       chromaData[i * 4] = (c * 255) | 0;
-      chromaData[i * 4 + 1] = i === heroIndex ? (heroChroma * 255) | 0 : 0;
+      chromaData[i * 4 + 1] = i === heroIndex ? 255 : 0;
     }
     chromaMap.needsUpdate = true;
 
