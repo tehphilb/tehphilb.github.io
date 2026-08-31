@@ -68,8 +68,10 @@ uniform float separationDistance;
 uniform float alignmentDistance;
 uniform float cohesionDistance;
 uniform float freedomFactor;
-uniform vec3 rayOrigin;
-uniform vec3 rayDirection;
+uniform vec3 predator;
+uniform float cameraZ;
+uniform float tanHalfFov;
+uniform float aspect;
 
 const float width = resolution.x;
 const float height = resolution.y;
@@ -89,23 +91,38 @@ void main() {
   vec3 velocity = selfVelocity;
   float limit = SPEED_LIMIT;
 
-  vec3 directionToRay = rayOrigin - selfPosition;
-  float projectionLength = dot(directionToRay, rayDirection);
-  vec3 closestPoint = rayOrigin - rayDirection * projectionLength;
-  vec3 directionToClosestPoint = closestPoint - selfPosition;
-  float distanceToClosestPoint = length(directionToClosestPoint);
-  float distanceToClosestPointSq = distanceToClosestPoint * distanceToClosestPoint;
-  float rayRadius = 280.0;
-  float rayRadiusSq = rayRadius * rayRadius;
-
-  if (distanceToClosestPointSq < rayRadiusSq) {
-    float velocityAdjust = (distanceToClosestPointSq / rayRadiusSq - 1.0) * delta * 100.0;
-    velocity += normalize(directionToClosestPoint) * velocityAdjust;
-    limit += 5.0;
-  }
-
   vec3 dir = selfPosition;
   float dist = length(dir);
+  float distSquared = dist * dist;
+
+  if (predator.z > 0.5) {
+    float viewZ = cameraZ - selfPosition.z;
+    if (viewZ > 1.0) {
+      vec2 ndc = selfPosition.xy / vec2(aspect * tanHalfFov * viewZ, tanHalfFov * viewZ);
+      vec2 d = ndc - predator.xy;
+      dist = length(vec2(d.x * aspect, d.y));
+      float preyRadius = 0.42;
+      if (dist < preyRadius) {
+        vec3 ro = vec3(0.0, 0.0, cameraZ);
+        vec3 hit = vec3(
+          predator.x * aspect * tanHalfFov * cameraZ,
+          predator.y * tanHalfFov * cameraZ,
+          0.0
+        );
+        vec3 rd = normalize(hit - ro);
+        vec3 closest = ro + rd * dot(selfPosition - ro, rd);
+        dir = closest - selfPosition;
+        if (length(dir) < 0.0001) dir = vec3(d.x, d.y, 0.0);
+        distSquared = dist * dist;
+        float f = (distSquared / (preyRadius * preyRadius) - 1.0) * delta * 100.0;
+        velocity += normalize(dir) * f;
+        limit += 5.0;
+      }
+    }
+  }
+
+  dir = selfPosition;
+  dist = length(dir);
   dir.y *= 2.5;
   velocity -= normalize(dir) * delta * 5.0;
 
@@ -116,7 +133,7 @@ void main() {
       dir = birdPosition - selfPosition;
       dist = length(dir);
       if (dist < 0.0001) continue;
-      float distSquared = dist * dist;
+      distSquared = dist * dist;
       if (distSquared > zoneRadiusSq) continue;
       float percent = distSquared / zoneRadiusSq;
       if (percent < separationThresh) {
@@ -351,8 +368,12 @@ async function startGltfFlock(container, THREE, color) {
   velocityUniforms.alignmentDistance = { value: 48 };
   velocityUniforms.cohesionDistance = { value: 48 };
   velocityUniforms.freedomFactor = { value: 0.75 };
-  velocityUniforms.rayOrigin = { value: new THREE.Vector3() };
-  velocityUniforms.rayDirection = { value: new THREE.Vector3(0, 0, -1) };
+  velocityUniforms.predator = { value: new THREE.Vector3() };
+  velocityUniforms.cameraZ = { value: camera.position.z };
+  velocityUniforms.tanHalfFov = {
+    value: Math.tan((camera.fov * Math.PI) / 360),
+  };
+  velocityUniforms.aspect = { value: 1 };
   velocityVariable.material.defines.BOUNDS = BOUNDS.toFixed(2);
   velocityVariable.wrapS = THREE.RepeatWrapping;
   velocityVariable.wrapT = THREE.RepeatWrapping;
@@ -469,13 +490,14 @@ uniform sampler2D chromaMap;`,
   scene.add(birds);
 
   const pointer = new THREE.Vector2();
-  const raycaster = new THREE.Raycaster();
   let pointerLive = false;
   window.addEventListener(
     "pointermove",
     (e) => {
-      pointer.x = (e.clientX / innerWidth) * 2 - 1;
-      pointer.y = -(e.clientY / innerHeight) * 2 + 1;
+      const r = renderer.domElement.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+      pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
       pointerLive = true;
     },
     { passive: true },
@@ -489,6 +511,11 @@ uniform sampler2D chromaMap;`,
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
+    velocityUniforms.aspect.value = camera.aspect;
+    velocityUniforms.tanHalfFov.value = Math.tan(
+      (camera.fov * Math.PI) / 360,
+    );
+    velocityUniforms.cameraZ.value = camera.position.z;
   };
   setSize();
   new ResizeObserver(setSize).observe(container);
@@ -559,13 +586,11 @@ uniform sampler2D chromaMap;`,
         gpuCompute.getCurrentRenderTarget(velocityVariable).texture;
       materialShader.uniforms.chromaMap.value = chromaMap;
     }
+    velocityUniforms.cameraZ.value = camera.position.z;
     if (pointerLive) {
-      raycaster.setFromCamera(pointer, camera);
-      velocityUniforms.rayOrigin.value.copy(raycaster.ray.origin);
-      velocityUniforms.rayDirection.value.copy(raycaster.ray.direction);
+      velocityUniforms.predator.value.set(pointer.x, pointer.y, 1);
     } else {
-      velocityUniforms.rayOrigin.value.set(0, 0, 8000);
-      velocityUniforms.rayDirection.value.set(0, 1, 0);
+      velocityUniforms.predator.value.set(0, 0, 0);
     }
     gpuCompute.compute();
     renderer.render(scene, camera);

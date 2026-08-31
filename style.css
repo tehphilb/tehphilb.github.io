@@ -178,6 +178,8 @@ a { color: inherit; }
   transition: border-color .15s linear;
 }
 
+.proj + .label { margin-top: 2.4rem; }
+
 .proj__name {
   font-weight: 600;
   font-size: clamp(17px, 2.4vw, 24px);
