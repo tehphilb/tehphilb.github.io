@@ -42,8 +42,7 @@ function loopControl(reduceMotion, start, stop) {
   });
 }
 
-const BIRD_URL =
-  "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r185/examples/models/gltf/Parrot.glb";
+const BIRD_URL = "models/Parrot.glb";
 
 const SHADER_POSITION = /* glsl */ `
 uniform float time;
@@ -432,7 +431,7 @@ uniform float time;`,
       pointer.y = -(e.clientY / innerHeight) * 2 + 1;
       pointerLive = true;
     },
-    { passive: true }
+    { passive: true },
   );
 
   const setSize = () => {
