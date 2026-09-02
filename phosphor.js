@@ -2,23 +2,10 @@
    WebGPU-Compute wenn verfuegbar, sonst ein leichter WebGL-Schwarm.
    https://threejs.org/examples/webgpu_compute_birds.html */
 
+const bgName = new URLSearchParams(location.search).get("bg");
 const container = document.querySelector(".phosphor");
-if (container) init(container);
-idleScreen(document.querySelector(".page"));
+if (container && (bgName === "flock" || bgName === "birds")) init(container);
 foldProjects(document.querySelector(".work__fold"));
-
-function idleScreen(page) {
-  if (!page) return;
-  const idleMs = 17000;
-  let timer = 0;
-  const wake = () => {
-    page.classList.remove("is-idle");
-    clearTimeout(timer);
-    timer = setTimeout(() => page.classList.add("is-idle"), idleMs);
-  };
-  window.addEventListener("pointermove", wake, { passive: true });
-  wake();
-}
 
 function foldProjects(fold) {
   if (!fold) return;
@@ -73,6 +60,11 @@ const SHADER_POSITION = /* glsl */ `
 uniform float time;
 uniform float delta;
 void main() {
+  float id = floor(gl_FragCoord.x) + floor(gl_FragCoord.y) * resolution.x;
+  if (id >= BIRD_COUNT) {
+    gl_FragColor = vec4(100000.0, 100000.0, 100000.0, 1.0);
+    return;
+  }
   vec2 uv = gl_FragCoord.xy / resolution.xy;
   vec4 tmpPos = texture2D(texturePosition, uv);
   vec3 position = tmpPos.xyz;
@@ -105,6 +97,11 @@ const float PI_2 = PI * 2.0;
 const float SPEED_LIMIT = 9.0;
 
 void main() {
+  float id = floor(gl_FragCoord.x) + floor(gl_FragCoord.y) * resolution.x;
+  if (id >= BIRD_COUNT) {
+    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    return;
+  }
   float zoneRadius = separationDistance + alignmentDistance + cohesionDistance;
   float separationThresh = separationDistance / zoneRadius;
   float alignmentThresh = (separationDistance + alignmentDistance) / zoneRadius;
@@ -317,8 +314,8 @@ async function startGltfFlock(container, THREE, color) {
   const birdGeo = mesh.geometry;
   const anim = bakeFlap(THREE, birdGeo, gltf.animations);
 
-  const WIDTH = 20;
-  const COUNT = 315;
+  const WIDTH = 12;
+  const COUNT = 137;
   const BOUNDS = 520;
   const BOUNDS_HALF = BOUNDS / 2;
   const SIZE = 0.26;
@@ -353,7 +350,18 @@ async function startGltfFlock(container, THREE, color) {
   const dtVelocity = gpuCompute.createTexture();
   const pData = dtPosition.image.data;
   const vData = dtVelocity.image.data;
-  for (let k = 0; k < pData.length; k += 4) {
+  for (let i = 0, k = 0; k < pData.length; k += 4, i++) {
+    if (i >= COUNT) {
+      pData[k] = 1e5;
+      pData[k + 1] = 1e5;
+      pData[k + 2] = 1e5;
+      pData[k + 3] = 1;
+      vData[k] = 0;
+      vData[k + 1] = 0;
+      vData[k + 2] = 0;
+      vData[k + 3] = 1;
+      continue;
+    }
     pData[k] = Math.random() * BOUNDS - BOUNDS_HALF;
     pData[k + 1] = Math.random() * BOUNDS - BOUNDS_HALF;
     pData[k + 2] = Math.random() * BOUNDS - BOUNDS_HALF;
@@ -400,6 +408,8 @@ async function startGltfFlock(container, THREE, color) {
   };
   velocityUniforms.aspect = { value: 1 };
   velocityVariable.material.defines.BOUNDS = BOUNDS.toFixed(2);
+  velocityVariable.material.defines.BIRD_COUNT = COUNT.toFixed(1);
+  positionVariable.material.defines.BIRD_COUNT = COUNT.toFixed(1);
   velocityVariable.wrapS = THREE.RepeatWrapping;
   velocityVariable.wrapT = THREE.RepeatWrapping;
   positionVariable.wrapS = THREE.RepeatWrapping;
@@ -953,7 +963,7 @@ async function startCompute(container, color) {
 }
 
 function startCpu(container, THREE, color) {
-  const BIRDS = 420;
+  const BIRDS = 137;
   const BOUNDS = 520;
   const HALF = BOUNDS / 2;
 

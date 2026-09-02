@@ -75,17 +75,14 @@ a {
   padding: clamp(24px, 4vw, 48px) clamp(20px, 5vw, 64px);
   display: flex;
   flex-direction: column;
+  pointer-events: none;
 }
 
-.page > :not(.top) {
-  opacity: 1;
-  transition: opacity 1.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.page.is-idle > :not(.top) {
-  opacity: 0.12;
-  transition-duration: 2.8s;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+.page .top,
+.page .work,
+.page .foot,
+.hero a {
+  pointer-events: auto;
 }
 
 /* --- top ----------------------------------------------------------- */
@@ -140,6 +137,7 @@ a {
 .hero {
   margin-block: auto;
   padding-block: clamp(48px, 10vh, 96px);
+  pointer-events: none;
 }
 
 .hero__mail {
