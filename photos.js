@@ -130,15 +130,18 @@ function render() {
 
   for (const photo of photos) {
     const li = document.createElement("li");
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "photos__thumb";
-    button.dataset.id = photo.id;
+    const thumb = document.createElement("a");
+    thumb.className = "photos__thumb";
+    thumb.href = imageUrl(photo.id);
+    thumb.dataset.id = photo.id;
     const img = document.createElement("img");
     img.src = imageUrl(photo.id);
     img.alt = photo.name || "foto";
-    button.append(img);
-    li.append(button);
+    img.decoding = "async";
+    img.loading = "lazy";
+    img.referrerPolicy = "no-referrer";
+    thumb.append(img);
+    li.append(thumb);
     grid.append(li);
   }
 }
@@ -236,8 +239,10 @@ input.addEventListener("change", async () => {
 });
 
 grid.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-id]");
-  if (button) openViewer(button.dataset.id);
+  const thumb = event.target.closest("[data-id]");
+  if (!thumb) return;
+  event.preventDefault();
+  openViewer(thumb.dataset.id);
 });
 
 viewer.querySelector("[data-close]").addEventListener("click", closeViewer);
