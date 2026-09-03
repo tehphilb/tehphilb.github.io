@@ -5,23 +5,12 @@
 const bgName = new URLSearchParams(location.search).get("bg");
 const container = document.querySelector(".phosphor");
 if (container && (bgName === "flock" || bgName === "birds")) init(container);
-foldProjects(document.querySelector(".work__fold"));
 keepBackground(document.querySelector('a[href^="photos.html"]'));
 keepBackground(document.querySelector('a.top__mark[href^="index.html"]'));
 
 function keepBackground(link) {
   if (!link || !location.search) return;
   link.search = location.search;
-}
-
-function foldProjects(fold) {
-  if (!fold) return;
-  const sum = fold.querySelector(".work__sum");
-  if (!sum) return;
-  sum.addEventListener("click", () => {
-    const open = sum.getAttribute("aria-expanded") === "true";
-    sum.setAttribute("aria-expanded", open ? "false" : "true");
-  });
 }
 
 function tokens() {

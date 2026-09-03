@@ -25,6 +25,14 @@
       crossorigin
     />
     <link rel="stylesheet" href="style.css" />
+    <script>
+      if (
+        !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+        !("onpagereveal" in window)
+      ) {
+        document.documentElement.dataset.motion = "boot";
+      }
+    </script>
     <script type="importmap">
       {
         "imports": {
@@ -87,6 +95,7 @@
       </div>
     </dialog>
 
+    <script src="motion.js"></script>
     <script src="photos.js"></script>
     <script type="module" src="phosphor.js"></script>
     <script type="module" src="ocean.js"></script>

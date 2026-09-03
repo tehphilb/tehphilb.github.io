@@ -7,6 +7,14 @@
     <meta name="robots" content="noindex" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="style.css" />
+    <script>
+      if (
+        !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+        !("onpagereveal" in window)
+      ) {
+        document.documentElement.dataset.motion = "boot";
+      }
+    </script>
   </head>
   <body>
     <main class="stage">
@@ -66,6 +74,7 @@
         <a href="datenschutz.html">Datenschutz</a>
       </nav>
     </main>
+    <script src="motion.js"></script>
     <script src="legal.js"></script>
   </body>
 </html>

@@ -123,6 +123,7 @@ a.top__mark:hover .top__back {
   font-size: 13px;
   letter-spacing: 0.12em;
   color: var(--mute);
+  view-transition-name: site-top;
 }
 
 .top__mark {
@@ -214,6 +215,7 @@ a.top__mark:hover .top__back {
   overflow: hidden;
   pointer-events: none;
   user-select: none;
+  view-transition-name: site-bg;
 }
 
 .phosphor canvas {
@@ -225,6 +227,7 @@ a.top__mark:hover .top__back {
 /* --- projects ------------------------------------------------------- */
 .work__sum {
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .work__toggle {
@@ -232,9 +235,10 @@ a.top__mark:hover .top__back {
   color: var(--mute);
   font-size: clamp(17px, 2.4vw, 24px);
   line-height: 1;
+  transform: rotate(0deg);
   transition:
     color 0.15s linear,
-    rotate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .work__toggle::before {
@@ -242,7 +246,7 @@ a.top__mark:hover .top__back {
 }
 
 .work__sum[aria-expanded="true"] .work__toggle {
-  rotate: 45deg;
+  transform: rotate(45deg);
 }
 
 .work__sum:hover .work__toggle,
@@ -251,18 +255,13 @@ a.top__mark:hover .top__back {
 }
 
 .work__list {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.work__sum[aria-expanded="true"] + .work__list {
-  grid-template-rows: 1fr;
+  height: 0;
+  overflow: hidden;
+  transform: translateZ(0);
 }
 
 .work__list-inner {
   min-height: 0;
-  overflow: hidden;
 }
 
 .work__list .proj,
@@ -511,6 +510,7 @@ a.top__mark:hover .top__back {
   margin: 0 0 3rem;
   font-size: 13px;
   letter-spacing: 0.12em;
+  view-transition-name: site-top;
 }
 
 .legal-page .kicker a {
@@ -678,6 +678,100 @@ a.top__mark:hover .top__back {
 
   .photos__view-bar button {
     min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  html[data-motion="boot"] .page,
+  html[data-motion="boot"] .stage,
+  html[data-motion="leave"] .page,
+  html[data-motion="leave"] .stage {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+
+  html[data-motion="leave"] .page,
+  html[data-motion="leave"] .stage {
+    transform: translate3d(0, -12px, 0);
+    pointer-events: none;
+  }
+
+  html[data-motion="ready"] .page,
+  html[data-motion="ready"] .stage {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  html[data-motion="ready"] .page,
+  html[data-motion="ready"] .stage,
+  html[data-motion="boot"] .page,
+  html[data-motion="boot"] .stage,
+  html[data-motion="leave"] .page,
+  html[data-motion="leave"] .stage {
+    transition:
+      opacity 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.56s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: both;
+  }
+
+  ::view-transition-old(root) {
+    animation-name: vt-leave-forward;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: vt-enter-forward;
+  }
+
+  html:active-view-transition-type(back)::view-transition-old(root) {
+    animation-name: vt-leave-back;
+  }
+
+  html:active-view-transition-type(back)::view-transition-new(root) {
+    animation-name: vt-enter-back;
+  }
+
+  ::view-transition-group(site-bg),
+  ::view-transition-group(site-top) {
+    animation-duration: 0.56s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes vt-leave-forward {
+    to {
+      opacity: 0;
+      transform: translate3d(0, -14px, 0);
+    }
+  }
+
+  @keyframes vt-enter-forward {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+  }
+
+  @keyframes vt-leave-back {
+    to {
+      opacity: 0;
+      transform: translate3d(0, 14px, 0);
+    }
+  }
+
+  @keyframes vt-enter-back {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -20px, 0);
+    }
   }
 }
 
