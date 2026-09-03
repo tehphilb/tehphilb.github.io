@@ -4,5 +4,6 @@
   "zip": "22455",
   "city": "Hamburg",
   "country": "Deutschland",
-  "email": "info@icke.dev"
+  "email": "info@icke.dev",
+  "photosApi": "https://icke-photos.tehphilb.workers.dev"
 }

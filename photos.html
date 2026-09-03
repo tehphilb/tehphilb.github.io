@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>photos — icke.dev</title>
+    <meta name="description" content="photos — icke.dev" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="fonts/ibm-plex-mono-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/ibm-plex-mono-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="page page--photos">
+      <header class="top">
+        <a class="top__mark" href="index.html">icke.dev</a>
+      </header>
+
+      <section class="photos" aria-label="Photos">
+        <p class="label">photos</p>
+        <div class="proj photos__head">
+          <span class="proj__name">gallery</span>
+          <span class="proj__meta" data-photos-count>00</span>
+        </div>
+        <form class="proj photos__gate" data-photos-gate>
+          <span class="proj__name">unlock</span>
+          <label class="photos__key-wrap">
+            <span class="visually-hidden">key</span>
+            <input
+              class="photos__key"
+              type="password"
+              name="key"
+              autocomplete="current-password"
+              placeholder="UPLOAD_TOKEN"
+              required
+            />
+          </label>
+          <button type="submit" class="proj__arrow" aria-label="unlock">
+            &rarr;
+          </button>
+        </form>
+        <label class="proj photos__add" data-photos-add hidden>
+          <input
+            class="photos__input"
+            type="file"
+            accept="image/*,image/heic,image/heif"
+            multiple
+          />
+          <span class="proj__name">add photos</span>
+          <span class="proj__arrow" aria-hidden="true">+</span>
+        </label>
+        <p class="photos__hint" data-photos-hint>
+          zuerst den cloudflare-key eingeben. danach erscheint add photos.
+        </p>
+        <p class="photos__status" data-photos-status hidden></p>
+        <ul class="photos__grid" data-photos-grid hidden></ul>
+        <p class="photos__empty" data-photos-empty>noch keine fotos.</p>
+      </section>
+
+      <footer class="foot">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <button type="button" class="photos__lock" data-photos-lock hidden>
+          lock
+        </button>
+      </footer>
+    </main>
+
+    <dialog class="photos__view" aria-label="Foto">
+      <img alt="" />
+      <div class="photos__view-bar">
+        <button type="button" data-close>close</button>
+        <button type="button" data-delete hidden>delete</button>
+      </div>
+    </dialog>
+
+    <script src="photos.js"></script>
+  </body>
+</html>
