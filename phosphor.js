@@ -6,6 +6,13 @@ const bgName = new URLSearchParams(location.search).get("bg");
 const container = document.querySelector(".phosphor");
 if (container && (bgName === "flock" || bgName === "birds")) init(container);
 foldProjects(document.querySelector(".work__fold"));
+keepBackground(document.querySelector('a[href^="photos.html"]'));
+keepBackground(document.querySelector('a.top__mark[href^="index.html"]'));
+
+function keepBackground(link) {
+  if (!link || !location.search) return;
+  link.search = location.search;
+}
 
 function foldProjects(fold) {
   if (!fold) return;

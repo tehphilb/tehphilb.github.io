@@ -7,10 +7,8 @@ const JPEG_QUALITY = 0.84;
 const input = document.querySelector(".photos__input");
 const countNode = document.querySelector("[data-photos-count]");
 const statusNode = document.querySelector("[data-photos-status]");
-const hintNode = document.querySelector("[data-photos-hint]");
 const grid = document.querySelector("[data-photos-grid]");
 const empty = document.querySelector("[data-photos-empty]");
-const gate = document.querySelector("[data-photos-gate]");
 const addRow = document.querySelector("[data-photos-add]");
 const lockButton = document.querySelector("[data-photos-lock]");
 const deleteButton = document.querySelector("[data-delete]");
@@ -42,13 +40,9 @@ function setOwner(next, nextToken = token) {
   token = next ? nextToken : "";
   if (next) localStorage.setItem(TOKEN_KEY, token);
   else localStorage.removeItem(TOKEN_KEY);
-  gate.hidden = next;
   addRow.hidden = !next;
   lockButton.hidden = !next;
   deleteButton.hidden = !next;
-  hintNode.textContent = next
-    ? "add photos antippen — mediathek oder kamera."
-    : "zuerst den cloudflare-key eingeben. danach erscheint add photos.";
 }
 
 function localApiFallback() {
@@ -228,28 +222,6 @@ function closeViewer() {
   openId = "";
   viewerImg.removeAttribute("src");
 }
-
-gate.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const next = String(new FormData(gate).get("key") || "").trim();
-  if (!next) return;
-  token = next;
-  setStatus("pruefe key…");
-  try {
-    const res = await api("/api/auth");
-    if (!res.ok) {
-      setOwner(false);
-      setStatus("key ungueltig.");
-      return;
-    }
-    setOwner(true, next);
-    gate.reset();
-    setStatus("");
-  } catch {
-    setOwner(false);
-    setStatus("worker nicht erreichbar.");
-  }
-});
 
 lockButton.addEventListener("click", () => {
   setOwner(false);

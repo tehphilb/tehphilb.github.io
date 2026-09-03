@@ -12,7 +12,26 @@
     <main class="stage">
       <article class="card legal-page">
         <p class="kicker"><a href="index.html">← icke.dev</a></p>
-        <h1>Impressum</h1>
+        <h1 data-photos-reveal>Impressum</h1>
+        <form class="legal-gate" data-photos-gate hidden>
+          <label>
+            <span class="visually-hidden">key</span>
+            <input
+              class="legal-gate__key"
+              type="password"
+              name="key"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+            />
+          </label>
+          <button type="submit" class="visually-hidden">ok</button>
+          <p class="legal-gate__status" data-photos-gate-status hidden></p>
+          <button type="button" class="legal-gate__lock" data-photos-lock hidden>
+            lock
+          </button>
+        </form>
         <p>Angaben gemaess § 5 DDG (Digitale-Dienste-Gesetz).</p>
 
         <h2>Anbieter</h2>

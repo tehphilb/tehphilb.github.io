@@ -26,6 +26,7 @@ async function loadSite() {
 
   const apiBase = String(site.photosApi || "").replace(/\/+$/, "");
   await fillPhotoCount(apiBase);
+  bindHiddenUnlock(apiBase);
 }
 
 async function fillPhotoCount(apiBase) {
@@ -42,6 +43,64 @@ async function fillPhotoCount(apiBase) {
   } catch {
     /* keep markup fallback */
   }
+}
+
+const TOKEN_KEY = "icke-upload-token";
+
+function bindHiddenUnlock(apiBase) {
+  const reveal = document.querySelector("[data-photos-reveal]");
+  const gate = document.querySelector("[data-photos-gate]");
+  const statusNode = document.querySelector("[data-photos-gate-status]");
+  const lockButton = gate?.querySelector("[data-photos-lock]");
+  const keyInput = gate?.querySelector('input[name="key"]');
+  if (!reveal || !gate || !apiBase) return;
+
+  const setStatus = (text) => {
+    if (!statusNode) return;
+    statusNode.hidden = !text;
+    statusNode.textContent = text || "";
+  };
+
+  const setUnlocked = (on) => {
+    if (keyInput) keyInput.hidden = on;
+    if (lockButton) lockButton.hidden = !on;
+  };
+
+  reveal.addEventListener("click", () => {
+    gate.hidden = false;
+    setUnlocked(Boolean(localStorage.getItem(TOKEN_KEY)));
+    if (keyInput && !keyInput.hidden) keyInput.focus();
+  });
+
+  gate.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const next = String(new FormData(gate).get("key") || "").trim();
+    if (!next) return;
+    setStatus("");
+    try {
+      const res = await fetch(`${apiBase}/api/auth`, {
+        headers: { Authorization: `Bearer ${next}` },
+      });
+      if (!res.ok) {
+        localStorage.removeItem(TOKEN_KEY);
+        setUnlocked(false);
+        setStatus("");
+        return;
+      }
+      localStorage.setItem(TOKEN_KEY, next);
+      gate.reset();
+      setUnlocked(true);
+      setStatus("");
+    } catch {
+      setStatus("");
+    }
+  });
+
+  lockButton?.addEventListener("click", () => {
+    localStorage.removeItem(TOKEN_KEY);
+    setUnlocked(false);
+    gate.hidden = true;
+  });
 }
 
 loadSite().catch(() => {});

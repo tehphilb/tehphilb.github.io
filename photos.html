@@ -25,38 +25,36 @@
       crossorigin
     />
     <link rel="stylesheet" href="style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three.module.min.js",
+          "three/addons/": "./vendor/jsm/"
+        }
+      }
+    </script>
   </head>
   <body>
+    <div class="phosphor" aria-hidden="true"></div>
     <main class="page page--photos">
       <header class="top">
-        <a class="top__mark" href="index.html">icke.dev</a>
+        <a class="top__mark" href="index.html">
+          <span class="top__back" aria-hidden="true">&larr;</span>
+          icke.dev
+        </a>
+        <button
+          type="button"
+          class="top__dot"
+          aria-label="Schwarm einfärben"
+          aria-pressed="false"
+        ></button>
       </header>
 
       <section class="photos" aria-label="Photos">
-        <p class="label">photos</p>
-        <div class="proj photos__head">
-          <span class="proj__name">gallery</span>
-          <span class="proj__meta" data-photos-count>00</span>
-        </div>
-        <form class="proj photos__gate" data-photos-gate>
-          <span class="proj__name">unlock</span>
-          <label class="photos__key-wrap">
-            <span class="visually-hidden">key</span>
-            <input
-              class="photos__key"
-              type="password"
-              name="key"
-              autocomplete="current-password"
-              autocapitalize="off"
-              autocorrect="off"
-              spellcheck="false"
-              required
-            />
-          </label>
-          <button type="submit" class="proj__arrow" aria-label="unlock">
-            &rarr;
-          </button>
-        </form>
+        <p class="label photos__label">
+          photos
+          <span data-photos-count>00</span>
+        </p>
         <label class="proj photos__add" data-photos-add hidden>
           <input
             class="photos__input"
@@ -67,9 +65,6 @@
           <span class="proj__name">add photos</span>
           <span class="proj__arrow" aria-hidden="true">+</span>
         </label>
-        <p class="photos__hint" data-photos-hint>
-          zuerst den cloudflare-key eingeben. danach erscheint add photos.
-        </p>
         <p class="photos__status" data-photos-status hidden></p>
         <ul class="photos__grid" data-photos-grid hidden></ul>
         <p class="photos__empty" data-photos-empty>noch keine fotos.</p>
@@ -93,5 +88,9 @@
     </dialog>
 
     <script src="photos.js"></script>
+    <script type="module" src="phosphor.js"></script>
+    <script type="module" src="ocean.js"></script>
+    <script type="module" src="noise.js"></script>
+    <script type="module" src="milkyway.js"></script>
   </body>
 </html>
