@@ -23,6 +23,25 @@ async function loadSite() {
     node.setAttribute("href", `mailto:${value}`);
     node.textContent = value;
   });
+
+  const apiBase = String(site.photosApi || "").replace(/\/+$/, "");
+  await fillPhotoCount(apiBase);
+}
+
+async function fillPhotoCount(apiBase) {
+  const node = document.querySelector("[data-photos-count]");
+  if (!node || !apiBase) return;
+  try {
+    const list = await fetch(`${apiBase}/api/photos`);
+    if (!list.ok) return;
+    const photos = await list.json();
+    node.textContent = String(Array.isArray(photos) ? photos.length : 0).padStart(
+      2,
+      "0",
+    );
+  } catch {
+    /* keep markup fallback */
+  }
 }
 
 loadSite().catch(() => {});

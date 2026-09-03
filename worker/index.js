@@ -42,19 +42,14 @@ export default {
   },
 };
 
-function allowedOrigins(env) {
-  return String(env.ALLOWED_ORIGINS || "")
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-}
-
 function corsHeaders(request, env) {
   const headers = new Headers();
   const origin = request.headers.get("Origin") || "";
-  if (allowedOrigins(env).includes(origin)) {
+  if (origin) {
     headers.set("Access-Control-Allow-Origin", origin);
     headers.set("Vary", "Origin");
+  } else {
+    headers.set("Access-Control-Allow-Origin", "*");
   }
   headers.set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
   headers.set("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Photo-Name");
