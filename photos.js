@@ -16,10 +16,27 @@ const viewer = document.querySelector(".photos__view");
 const viewerImg = viewer.querySelector("img");
 
 let apiBase = "";
-let token = localStorage.getItem(TOKEN_KEY) || "";
+let token = readToken();
 let owner = false;
 let photos = [];
 let openId = "";
+
+function readToken() {
+  try {
+    return localStorage.getItem(TOKEN_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
+function writeToken(value) {
+  try {
+    if (value) localStorage.setItem(TOKEN_KEY, value);
+    else localStorage.removeItem(TOKEN_KEY);
+  } catch {
+    /* private safari */
+  }
+}
 
 function padCount(n) {
   return String(n).padStart(2, "0");
@@ -38,8 +55,7 @@ function setStatus(text) {
 function setOwner(next, nextToken = token) {
   owner = next;
   token = next ? nextToken : "";
-  if (next) localStorage.setItem(TOKEN_KEY, token);
-  else localStorage.removeItem(TOKEN_KEY);
+  writeToken(next ? token : "");
   addRow.hidden = !next;
   lockButton.hidden = !next;
   deleteButton.hidden = !next;
@@ -66,9 +82,39 @@ function apiUrl(path) {
 
 async function api(path, options = {}) {
   const headers = new Headers(options.headers);
-  if (token) headers.set("Authorization", `Bearer ${token}`);
-  const res = await fetch(apiUrl(path), { ...options, headers });
+  const method = String(options.method || "GET").toUpperCase();
+  const needsAuth = Boolean(token) && (method !== "GET" || path === "/api/auth");
+  if (needsAuth) headers.set("Authorization", `Bearer ${token}`);
+  const res = await fetch(apiUrl(path), {
+    ...options,
+    headers,
+    credentials: "omit",
+    cache: "no-store",
+  });
   return res;
+}
+
+function loadListJsonp() {
+  return new Promise((resolve, reject) => {
+    const name = `ickePhotos${Date.now().toString(36)}`;
+    const script = document.createElement("script");
+    const timer = window.setTimeout(() => finish(new Error("timeout")), 8000);
+    const finish = (err, data) => {
+      window.clearTimeout(timer);
+      try {
+        delete window[name];
+      } catch {
+        window[name] = undefined;
+      }
+      script.remove();
+      if (err) reject(err);
+      else resolve(data);
+    };
+    window[name] = (data) => finish(null, data);
+    script.onerror = () => finish(new Error("jsonp"));
+    script.src = `${apiUrl("/api/photos")}?callback=${name}`;
+    document.head.append(script);
+  });
 }
 
 function imageUrl(id) {
@@ -151,9 +197,17 @@ async function refresh() {
     setStatus("galerie nicht verbunden.");
     return;
   }
-  const res = await api("/api/photos");
-  if (!res.ok) throw new Error("list failed");
-  photos = await res.json();
+  try {
+    const res = await fetch(apiUrl("/api/photos"), {
+      credentials: "omit",
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("list failed");
+    photos = await res.json();
+  } catch {
+    photos = await loadListJsonp();
+  }
+  if (!Array.isArray(photos)) photos = [];
   render();
 }
 
@@ -264,14 +318,16 @@ viewer.addEventListener("click", (event) => {
 });
 
 (async function start() {
-  await loadConfig();
-  if (!apiBase) {
-    setOwner(false);
-    setStatus("galerie nicht verbunden.");
-    return;
+  try {
+    await loadConfig();
+    if (!apiBase) {
+      setOwner(false);
+      setStatus("galerie nicht verbunden.");
+      return;
+    }
+    await refresh();
+  } catch {
+    setStatus("galerie nicht verfuegbar.");
   }
-  await checkOwner();
-  await refresh();
-})().catch(() => {
-  setStatus("galerie nicht verfuegbar.");
-});
+  checkOwner().catch(() => setOwner(false));
+})();

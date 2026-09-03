@@ -13,7 +13,15 @@ export default {
 
     try {
       if (path === "/api/photos" && request.method === "GET") {
-        return json(request, env, await listPhotos(env));
+        const list = await listPhotos(env);
+        const cb = String(url.searchParams.get("callback") || "");
+        if (/^[A-Za-z_$][\w$]*$/.test(cb)) {
+          const headers = corsHeaders(request, env);
+          headers.set("Content-Type", "text/javascript; charset=utf-8");
+          headers.set("Cache-Control", "no-store");
+          return new Response(`${cb}(${JSON.stringify(list)})`, { headers });
+        }
+        return json(request, env, list);
       }
 
       if (path === "/api/auth" && request.method === "GET") {

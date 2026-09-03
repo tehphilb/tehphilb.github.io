@@ -33,7 +33,10 @@ async function fillPhotoCount(apiBase) {
   const node = document.querySelector("[data-photos-count]");
   if (!node || !apiBase) return;
   try {
-    const list = await fetch(`${apiBase}/api/photos`);
+    const list = await fetch(`${apiBase}/api/photos`, {
+      credentials: "omit",
+      cache: "no-store",
+    });
     if (!list.ok) return;
     const photos = await list.json();
     node.textContent = String(Array.isArray(photos) ? photos.length : 0).padStart(
@@ -46,6 +49,23 @@ async function fillPhotoCount(apiBase) {
 }
 
 const TOKEN_KEY = "icke-upload-token";
+
+function readToken() {
+  try {
+    return localStorage.getItem(TOKEN_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
+function writeToken(value) {
+  try {
+    if (value) localStorage.setItem(TOKEN_KEY, value);
+    else localStorage.removeItem(TOKEN_KEY);
+  } catch {
+    /* private safari */
+  }
+}
 
 function bindHiddenUnlock(apiBase) {
   const reveal = document.querySelector("[data-photos-reveal]");
@@ -68,7 +88,7 @@ function bindHiddenUnlock(apiBase) {
 
   reveal.addEventListener("click", () => {
     gate.hidden = false;
-    setUnlocked(Boolean(localStorage.getItem(TOKEN_KEY)));
+    setUnlocked(Boolean(readToken()));
     if (keyInput && !keyInput.hidden) keyInput.focus();
   });
 
@@ -82,12 +102,12 @@ function bindHiddenUnlock(apiBase) {
         headers: { Authorization: `Bearer ${next}` },
       });
       if (!res.ok) {
-        localStorage.removeItem(TOKEN_KEY);
+        writeToken("");
         setUnlocked(false);
         setStatus("");
         return;
       }
-      localStorage.setItem(TOKEN_KEY, next);
+      writeToken(next);
       gate.reset();
       setUnlocked(true);
       setStatus("");
@@ -97,7 +117,7 @@ function bindHiddenUnlock(apiBase) {
   });
 
   lockButton?.addEventListener("click", () => {
-    localStorage.removeItem(TOKEN_KEY);
+    writeToken("");
     setUnlocked(false);
     gate.hidden = true;
   });
